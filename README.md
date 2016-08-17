@@ -26,32 +26,27 @@ You have now installed the extension inside your collection.  You are now able t
 
  A work item type is defined by XML, including the layout of the work item form.  As part of the walkthrough, you will add the control to the layout.  [Read more information on WebLayout XML](https://www.visualstudio.com/docs/work/reference/weblayout-xml-elements).  In this example, we will add the control to the Agile "user story".
 
-1.  Open the `Developer Command Prompt`.  Export the XML file to your desktop with command shown below.  Replace `<your-username>` with your computer's user account name. 
+1.  Open the `Developer Command Prompt`.  Export the XML file to your desktop with command shown below.
     ```
     witadmin exportwitd /collection:CollectionURL /p:Project /n:TypeName /f:FileName
     ```
-2. This creates a file in the directory that you specified.  Inside this file, navigate to the section called "Work Item Extensions".  This section shows the documentation of the control such as the inputs and ids.  Remember all this information was defined in the manifest.
+2. This creates a file in the directory that you specified.  Inside this file, navigate to the section called "Work Item Extensions".  This section shows the documentation of the control such as the inputs and ids.  All this information was defined in the manifest, *vss-extension.json*.
 
     ```xml
         <!--**********************************Work Item Extensions***************************
 
     Extension:
-        Name: color-control-dev
-        Id: example.color-control-dev
+        Name: hitcount-control-dev
+        Id: example.hitcount-control-dev
 
         Control contribution:
-            Id: example.color-control-dev.color-control-contribution
+            Id: example.hitcount-control-dev.hitcount-control-contribution
             Description:
             Inputs:
                 Id: FieldName
                 Description: The field associated with the control.
                 Type: Field
                 IsRequired: true
-
-                Id: Colors
-                Descriptions: The colors that match the values in the control.
-                Type: String
-                IsRequired: false
     ```
 
 4. Add an extension tag below the "Work Item Extensions" section as shown below to make your control available to work item form. 
@@ -65,7 +60,7 @@ You have now installed the extension inside your collection.  You are now able t
         -->
 
         <Extensions>
-            <Extension Id="example.color-control-dev-0.1.0" />
+            <Extension Id="example.hitcount-control-dev" />
         </Extensions>
      ```
 
@@ -75,8 +70,8 @@ You have now installed the extension inside your collection.  You are now able t
         <!--**********************************Work Item Extensions***************************
 
     Extension:
-        Name: color-control-dev
-        Id: example.color-control-dev
+        Name: hitcount-control-dev
+        Id: example.hitcount-control-dev
         ...
     ```
 
@@ -97,7 +92,7 @@ You have now installed the extension inside your collection.  You are now able t
                 <Control Label="Risk" Type="FieldControl" FieldName="Microsoft.VSTS.Common.Risk" />
     ```
 
-7. Finally, import this *.xml* file, using witadmin.  Replace `<your-username>` with your computer's user account name.
+7. Finally, import this *.xml* file, using witadmin.
     ```
     witadmin importwitd /collection:CollectionURL /p:Project /f:FileName
     ``` 
