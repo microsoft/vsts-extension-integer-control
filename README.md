@@ -1,5 +1,7 @@
 # Custom Control for the Work Item Form
 
+<img src="./img/logo.PNG" style="width: 150px;" />
+
 ### Usage ###
 
 1. Clone the repository.
