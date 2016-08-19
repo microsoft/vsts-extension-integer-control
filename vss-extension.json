@@ -7,8 +7,8 @@
         "vso.work",
         "vso.work_write"
     ],
-    "description": "Describe your extension.",
-    "publisher": "<your-publisher",
+    "description": "Easily change your integer values with an up/down control.",
+    "publisher": "<your-publisher>",
     "icons": {
     },
     "targets": [
