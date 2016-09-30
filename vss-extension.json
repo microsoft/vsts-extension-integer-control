@@ -8,7 +8,7 @@
         "vso.work_write"
     ],
     "description": "Easily change your integer values with an up/down control.",
-    "publisher": "MS-Sample",
+    "publisher": "MS-Devlabs",
     "icons": {
         "default": "img/logo.png"
     },
@@ -29,7 +29,7 @@
     },
     "links": {
         "support": {
-            "uri": "mailto:witiq@microsoft.com"
+            "uri": "https://github.com/Microsoft/vsts-integer-wit-custom-control/issues"
         },
         "learn": {
             "uri": "https://github.com/Microsoft/vsts-integer-wit-custom-control/blob/master/README.md"

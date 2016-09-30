@@ -19,6 +19,4 @@ var provider = () => {
 };
 
 
-const publisherId = VSS.getExtensionContext().publisherId;
-const extensionId = VSS.getExtensionContext().extensionId;
-VSS.register(`${publisherId}.${extensionId}.hitcount-control-contribution`, provider);
+VSS.register(VSS.getContribution().id, provider);
