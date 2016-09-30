@@ -18,4 +18,7 @@ var provider = () => {
     }
 };
 
-VSS.register("mariamclaughlin.hitcount-control-dev.hitcount-control-contribution", provider);
+
+const publisherId = VSS.getExtensionContext().publisherId;
+const extensionId = VSS.getExtensionContext().extensionId;
+VSS.register(`${publisherId}.${extensionId}.hitcount-control-contribution`, provider);

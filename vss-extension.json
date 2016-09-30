@@ -8,8 +8,9 @@
         "vso.work_write"
     ],
     "description": "Easily change your integer values with an up/down control.",
-    "publisher": "<your-publisher>",
+    "publisher": "msdevlabs",
     "icons": {
+        "default": "img/logo.png"
     },
     "targets": [
         {
@@ -17,7 +18,9 @@
         }
     ],
     "tags": [
-        "Sample"
+        "Work Item",
+        "Work Item control",
+        "Usability"
     ],
     "content": {
         "details": {
@@ -25,23 +28,11 @@
         }
     },
     "links": {
-        "home": {
-            "uri": "https://bit.ly"
-        },
-        "getstarted": {
-            "uri": "https://bit.ly"
-        },
-        "learn": {
-            "uri": "https://bit.ly"
-        },
         "support": {
-            "uri": "https://bit.ly"
+            "uri": "mailto:witiq@microsoft.com"
         },
         "repository": {
-            "uri": "https://bit.ly"
-        },
-        "issues": {
-            "uri": "https://bit.ly"
+            "uri": "https://github.com/Microsoft/vsts-integer-wit-custom-control"
         }
     },
     "branding": {
@@ -54,7 +45,7 @@
             "addressable": true
         },
         {
-            "path": "scripts",
+            "path": "dist",
             "addressable": true
         },
         {
@@ -67,7 +58,7 @@
         }
     ],
     "categories": [
-        "Integrate"
+        "Plan and track"
     ],
     "contributions": [
         {
@@ -77,13 +68,14 @@
                 "ms.vss-work-web.work-item-form"
             ],
             "properties": {
-                "name": "Priority",
+                "name": "Hit Count",
                 "group": "contributed",
                 "uri": "index.html",
                 "height": 28,
                 "inputs": [
                     {
                         "id": "FieldName",
+                        "name": "Backing integer field",
                         "description": "The field associated with the control.",
                         "type": "WorkItemField",
                         "properties": {
