@@ -1,4 +1,4 @@
-> This is currently only available on TFS "15" or later.
+> This is currently only available on TFS "15" or later and VSTS.
 
 ## Customize your work item form with a up/down control ##
 

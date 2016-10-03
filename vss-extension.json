@@ -8,7 +8,7 @@
         "vso.work_write"
     ],
     "description": "Easily change your integer values with an up/down control.",
-    "publisher": "MS-Devlabs",
+    "publisher": "ms-devlabs",
     "icons": {
         "default": "img/logo.png"
     },
