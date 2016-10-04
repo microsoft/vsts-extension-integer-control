@@ -18,4 +18,5 @@ var provider = () => {
     }
 };
 
-VSS.register("mariamclaughlin.hitcount-control-dev.hitcount-control-contribution", provider);
+
+VSS.register(VSS.getContribution().id, provider);
