@@ -29,16 +29,16 @@
     },
     "links": {
         "support": {
-            "uri": "https://github.com/Microsoft/vsts-integer-wit-custom-control/issues"
+            "uri": "https://github.com/Microsoft/vsts-extension-integer-control/issues"
         },
         "learn": {
-            "uri": "https://github.com/Microsoft/vsts-integer-wit-custom-control/blob/master/README.md"
+            "uri": "https://github.com/Microsoft/vsts-extension-integer-control/blob/master/README.md"
         },
         "repository": {
-            "uri": "https://github.com/Microsoft/vsts-integer-wit-custom-control"
+            "uri": "https://github.com/Microsoft/vsts-extension-integer-control"
         },
         "issues": {
-            "uri": "https://github.com/Microsoft/vsts-integer-wit-custom-control/issues"
+            "uri": "https://github.com/Microsoft/vsts-extension-integer-control/issues"
         }
     },
     "branding": {
