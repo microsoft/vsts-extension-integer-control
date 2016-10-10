@@ -1,35 +1,45 @@
-> This is currently only available on TFS "15" or later and VSTS.
+> This is currently only available on TFS "15" or later and Visual Studio Team Services.
 
-## Customize your work item form with a up/down control ##
+![Work Item Form](img/form.png)
 
-Easily change your integer values with a up/down control on the work item form (ex. Hit Count for bugs). 
+# Make integer fields more interactive
 
-The control can be used by both your mouse and keyboard (up and down arrow keys).
+![Hit Count Control](img/hitCountControl.png)
 
-## Quick steps to get started ##
+# Increase/decrease counters with a single click
 
-1. Navigate to your work item type customization page and to add an up/down control track an integer field.
+![Control keys](img/counter.png)
 
-2. Learn about how to customize the up/down control directly on XML [here](https://github.com/Microsoft/vsts-integer-wit-custom-control/blob/master/README.md) for TFS. 
+# How to get started
+## Visual Studio Team Services
 
-## Supported browsers ##
+1. Navigate to your work item form customization page and add a Hit Count Control.
 
-* Internet Explorer
-* Microsoft Edge
-* Google Chrome 
-* Firefox
+![Layout Customization](img/layoutCustomization.png)
 
-## Learn more ##
+2. Edit the control so it can use the right integer field.
 
-The [source](https://github.com/Microsoft/vsts-integer-wit-custom-control) for this extension can be found on Github - feel free to take, fork and extend. 
+![Configuration](img/configuration.png)
+
+## TFS On-Premise 
+
+We recommend TFS 2015 RC2 and higher when running this extension.
+
+[Learn more](https://github.com/Microsoft/vsts-extension-integer-control/blob/master/README.md) about how to customize the integer control directly on XML.
+
+# Source code 
+
+The [source](https://github.com/Microsoft/vsts-extension-color-control) for this extension can be found on Github - feel free to take, fork and extend. 
 
 You can also learn how to build your own custom control extension for the work item form [here](https://www.visualstudio.com/en-us/docs/integrate/extensions/develop/custom-control). 
 
-## Contributors ##
+> Microsoft DevLabs is an outlet for experiments from Microsoft, experiments that represent some of the latest ideas around developer tools. Solutions in this category are designed for broad usage, and you are encouraged to use and provide feedback on them; however, these extensions are not supported nor are any commitments made as to their longevity.
+
+# Contributors
 
 We thank the following contributor(s) for this extension: Alison Chow, Maria McLaughlin and Nelson Troncoso Aldas. 
 
-## Feedback ##
+# Feedback 
 
 We need your feedback! Here are some ways to connect with us:
 
