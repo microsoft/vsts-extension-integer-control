@@ -51,7 +51,7 @@
             "addressable": true
         },
         {
-            "path": "dist",
+            "path": "scripts",
             "addressable": true
         },
         {
@@ -68,14 +68,13 @@
     ],
     "contributions": [
         {
-            "id": "hitcount-control-contribution",
+            "id": "hitcount-control",
             "type": "ms.vss-work-web.work-item-form-control",
             "targets": [
                 "ms.vss-work-web.work-item-form"
             ],
             "properties": {
                 "name": "Hit Count",
-                "group": "contributed",
                 "uri": "index.html",
                 "height": 28,
                 "inputs": [
@@ -85,7 +84,9 @@
                         "description": "The field associated with the control.",
                         "type": "WorkItemField",
                         "properties": {
-                            "workItemFieldTypes": ["Integer"]
+                            "workItemFieldTypes": [
+                                "Integer"
+                            ]
                         },
                         "validation": {
                             "dataType": "String",
