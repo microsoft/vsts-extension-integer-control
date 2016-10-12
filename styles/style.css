@@ -1,20 +1,13 @@
 .bowtie-icon {
-    margin: 0 2px 2px 0;
-    padding: 5px;
     float: right;
-    line-height: 1.5;
-    box-shadow: none;
-}
-
-div {
-    display: block;
+    margin: 3px 5px 3px 3px;
 }
 
 .combo {
     border: 1px solid transparent;
     height: 2em;
     position: relative;
-    width: 100%;
+    padding-left: 2px;
     background: #fff;
 }
 
@@ -22,23 +15,6 @@ div {
     border: 1px solid #e6e6e6;
 }
 
-/* wrap div */
-.combo>div.wrap {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    overflow: hidden;
-    display: block;
-    padding-left: 2px;
-    width: 100%;
-}
-
-/* input div, no hover */
-.combo.text div.wrap>input[type=text] {
-    width: 100%;
-}
 
 .combo div.wrap>input[type=text] {
     height: 100%;
@@ -50,37 +26,3 @@ div {
     font-size: 14px;
     text-overflow: ellipsis;
 }
-/*
-input {
-    background-color: #fff;
-    font-family: "-apple-system",BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Helvetica,Ubuntu,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-    font-size: 100%;
-    -webkit-appearance: textfield;
-    background-color: white;
-    -webkit-rtl-ordering: logical;
-    -webkit-user-select: text;
-    cursor: auto;
-    padding: 1px;
-    border-width: 2px;
-    border-style: inset;
-    border-color: initial;
-    border-image: initial;
-        text-rendering: auto;
-    color: initial;
-    letter-spacing: normal;
-    word-spacing: normal;
-    text-transform: none;
-    text-indent: 0px;
-    text-shadow: none;
-    display: inline-block;
-    text-align: start;
-    margin: 0em 0em 0em 0em;
-    font: 10.6667px Arial;
-    -webkit-writing-mode: horizontal-tb;
-}
-
-input:not([type]), input[type="email" i], input[type="number" i], input[type="password" i], input[type="tel" i], input[type="url" i], input[type="text" i] {
-    padding: 1px 0px;
-}
-*/
-
