@@ -1,7 +1,5 @@
 {
     "id": "hitcount-control-dev",
     "name": "Hitcount Control (dev)",
-    "publisher": "seanferguson",
-    "version": "1.0.17",
     "public": false
 }
