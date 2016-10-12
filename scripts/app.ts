@@ -1,14 +1,14 @@
 import { Controller } from "./control";
-import * as ExtensionContracts from "TFS/WorkItemTracking/ExtensionContracts";
+import { IWorkItemLoadedArgs, IWorkItemFieldChangedArgs } from "TFS/WorkItemTracking/ExtensionContracts";
 
 var control: Controller;
 
 var provider = () => {
     return {
-        onLoaded: (workItemLoadedArgs: ExtensionContracts.IWorkItemLoadedArgs) => {
+        onLoaded: (workItemLoadedArgs: IWorkItemLoadedArgs) => {
             control = new Controller();
         },
-        onFieldChanged: (fieldChangedArgs: ExtensionContracts.IWorkItemFieldChangedArgs) => {
+        onFieldChanged: (fieldChangedArgs: IWorkItemFieldChangedArgs) => {
             var changedValue = fieldChangedArgs.changedFields[control.getFieldName()];
             if (changedValue !== undefined) {
                 control.updateExternal(changedValue);
@@ -16,6 +16,5 @@ var provider = () => {
         }
     }
 };
-
 
 VSS.register(VSS.getContribution().id, provider);
