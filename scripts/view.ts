@@ -1,5 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
-
 import { Model } from "./model";
 
 /**
@@ -18,17 +16,19 @@ export class View {
     private _init(): void {
 
         var container = $("<div />");
-        container.addClass("container combo input-text-box emptyBorder");
+        container.addClass("container combo input-text-box text emptyBorder");
 
-        var hitcount = $("<input />").attr("type", "string");
-        hitcount.addClass("wrap");
-        container.append(hitcount);
+        var wrap = $("<div />");
+        wrap.addClass("wrap");
+
+        var hitcount = $("<input />").attr("type", "text");
+        wrap.append(hitcount);
 
         this.currentValue = String(this.model.getCurrentValue());
 
         hitcount.val(this.currentValue);
         hitcount.attr("aria-valuenow", this.currentValue);
-        hitcount.change( () => {
+        hitcount.change(() => {
             this._inputChanged();
         }).bind('keydown', (evt: JQueryKeyEventObject) => {
             if (evt.keyCode == 38) {
@@ -42,25 +42,27 @@ export class View {
                     this.onDownTick();
                     evt.preventDefault();
                 }
-            }  
+            }
         });
 
         var uptick = $("<div />");
-        uptick.click( () => {
+        uptick.click(() => {
             this.onUpTick();
         });
 
         uptick.addClass("bowtie-icon bowtie-arrow-up");
-        
+
 
         var downtick = $("<div />");
-        downtick.click( () => {
+        downtick.click(() => {
             this.onDownTick();
         });
 
         downtick.addClass("bowtie-icon bowtie-arrow-down");
-        container.append(downtick);
-        container.append(uptick);
+        wrap.append(downtick);
+        wrap.append(uptick);
+
+        container.append(wrap);
 
         $("body").append(container);
     }

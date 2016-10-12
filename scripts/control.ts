@@ -11,13 +11,9 @@ import { ErrorView } from "./errorView";
 import * as Q from "q";
 
 export class Controller {
-
     private _fieldName: string = "";
-
     private _inputs: IDictionaryStringTo<string>;
-
     private _model: Model;
-
     private _view: View;
 
     constructor() {
@@ -25,7 +21,6 @@ export class Controller {
     }
 
     private _initialize(): void {
-
         this._inputs = VSS.getConfiguration().witInputs;
         this._fieldName = this._inputs["FieldName"];
 
@@ -61,7 +56,7 @@ export class Controller {
                 service.setFieldValue(this._fieldName, value).then(
                     () => {
                         this._update(value);
-              }, this._handleError)
+                    }, this._handleError)
             },
             this._handleError
         );

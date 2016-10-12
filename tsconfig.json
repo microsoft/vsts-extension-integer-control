@@ -10,7 +10,7 @@
         "./typings/index.d.ts"
     ],
     "exclude": [
-        "node_modules"
+        "node_modules"        
     ],
     "files": [
         "scripts/app.ts",

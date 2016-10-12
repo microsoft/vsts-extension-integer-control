@@ -29,16 +29,16 @@
     },
     "links": {
         "support": {
-            "uri": "https://github.com/Microsoft/vsts-integer-wit-custom-control/issues"
+            "uri": "https://github.com/Microsoft/vsts-extension-integer-control/issues"
         },
         "learn": {
-            "uri": "https://github.com/Microsoft/vsts-integer-wit-custom-control/blob/master/README.md"
+            "uri": "https://github.com/Microsoft/vsts-extension-integer-control/blob/master/README.md"
         },
         "repository": {
-            "uri": "https://github.com/Microsoft/vsts-integer-wit-custom-control"
+            "uri": "https://github.com/Microsoft/vsts-extension-integer-control"
         },
         "issues": {
-            "uri": "https://github.com/Microsoft/vsts-integer-wit-custom-control/issues"
+            "uri": "https://github.com/Microsoft/vsts-extension-integer-control/issues"
         }
     },
     "branding": {
@@ -51,7 +51,7 @@
             "addressable": true
         },
         {
-            "path": "dist",
+            "path": "scripts",
             "addressable": true
         },
         {
@@ -68,14 +68,13 @@
     ],
     "contributions": [
         {
-            "id": "hitcount-control-contribution",
+            "id": "hitcount-control",
             "type": "ms.vss-work-web.work-item-form-control",
             "targets": [
                 "ms.vss-work-web.work-item-form"
             ],
             "properties": {
                 "name": "Hit Count",
-                "group": "contributed",
                 "uri": "index.html",
                 "height": 28,
                 "inputs": [
@@ -85,7 +84,9 @@
                         "description": "The field associated with the control.",
                         "type": "WorkItemField",
                         "properties": {
-                            "workItemFieldTypes": ["Integer"]
+                            "workItemFieldTypes": [
+                                "Integer"
+                            ]
                         },
                         "validation": {
                             "dataType": "String",
