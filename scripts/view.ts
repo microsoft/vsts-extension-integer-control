@@ -21,7 +21,7 @@ export class View {
         var wrap = $("<div />");
         wrap.addClass("wrap");
 
-        var hitcount = $("<input />").attr("type", "text");
+        var hitcount = $("<input />").attr("type", "number");
         wrap.append(hitcount);
 
         this.currentValue = String(this.model.getCurrentValue());
