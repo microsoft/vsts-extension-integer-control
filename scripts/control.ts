@@ -48,6 +48,7 @@ export class Controller {
 
     private _handleError(error: string): void {
         let errorView = new ErrorView(error);
+        console.log("arorororororor");
     }
 
     private _updateInternal(value: number): void {
@@ -63,12 +64,12 @@ export class Controller {
     }
 
     private _update(value: number): void {
-        this._model.setCurrentValue(Number(value));
+        this._model.setCurrentValue(value);
         this._view.update(value);
     }
 
     public updateExternal(value: number): void {
-        this._update(Number(value));
+        this._update(value);
     }
 
     public getFieldName(): string {
