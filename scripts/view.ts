@@ -68,7 +68,7 @@ export class View {
     }
 
     private _inputChanged(): void {
-        let newValue = $(".wrap").val();
+        let newValue = $("input").val();
         if (this.onInputChanged) {
             this.onInputChanged(newValue);
         }
@@ -76,8 +76,7 @@ export class View {
 
     public update(value: number) {
         this.currentValue = String(value);
-        $(".wrap").val("");
-        $(".wrap").val(this.currentValue);
+        $("input").val(this.currentValue);
     }
 }
 

@@ -8,21 +8,27 @@ describe("Model", () => {
         model = new Model(0);
     });
 
-    it("current value of 0", () => {
+    it("correctly initialize value to 0", () => {
         expect(model.getCurrentValue()).to.be.deep.equal(0);
     });
 
-    it("next value from 0", () => {
+    it("increments 0 to be 1", () => {
         model.incrementValue();
         expect(model.getCurrentValue()).to.be.deep.equal(1);
     });
 
-    it("previous value of 0", () => {
+    it("decrements 0 to remain at 0", () => {
         model.decrementValue();
         expect(model.getCurrentValue()).to.be.deep.equal(0);
     });
 
-    it("previous and previous value of 20 is 18", () => {
+    it("decrements 1 to be 0", () => {
+        model.setCurrentValue(1);
+        model.decrementValue();
+        expect(model.getCurrentValue()).to.be.deep.equal(0);
+    });
+
+    it("decrements 20 twice to be 18", () => {
         model.setCurrentValue(20);
         model.decrementValue();
         model.decrementValue();

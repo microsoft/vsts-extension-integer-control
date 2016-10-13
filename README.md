@@ -2,14 +2,14 @@
 
 [Learn how to build your own custom control for the work item form.](https://www.visualstudio.com/en-us/docs/integrate/extensions/develop/custom-control)
 
-<img src="./img/logo.PNG" style="width: 150px;" />
+<img src="./img/logo.png" style="width: 150px;" />
 
 ### Usage ###
 
 1. Clone the repository.
-2. Open the Command Prompt and change to the directory where you cloned the project.  For instance, if it is cloned in a folder called "extensions" and saved as "vsts-integer-wit-custom-control", you will navigate to the following command line.
+2. Open the Command Prompt and change to the directory where you cloned the project.  For instance, if it is cloned in a folder called "extensions" and saved as "vsts-extension-integer-control", you will navigate to the following command line.
 
-        > cd C:\extensions\vsts-integer-wit-custom-control
+        > cd C:\extensions\vsts-extension-integer-control
         
 1. Run `npm install` to install required local dependencies.
 2. Run `npm install -g grunt` to install a global copy of grunt (unless it's already installed).
