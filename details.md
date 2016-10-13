@@ -29,7 +29,7 @@ We recommend TFS 2015 RC2 and higher when running this extension.
 
 # Source code 
 
-The [source](https://github.com/Microsoft/vsts-extension-color-control) for this extension can be found on Github - feel free to take, fork and extend. 
+The [source](https://github.com/Microsoft/vsts-extension-integer-control) for this extension can be found on Github - feel free to take, fork and extend. 
 
 You can also learn how to build your own custom control extension for the work item form [here](https://www.visualstudio.com/en-us/docs/integrate/extensions/develop/custom-control). 
 
