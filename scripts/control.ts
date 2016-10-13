@@ -48,7 +48,6 @@ export class Controller {
 
     private _handleError(error: string): void {
         let errorView = new ErrorView(error);
-        console.log("arorororororor");
     }
 
     private _updateInternal(value: number): void {
