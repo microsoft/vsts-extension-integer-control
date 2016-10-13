@@ -68,7 +68,7 @@ export class View {
     }
 
     private _inputChanged(): void {
-        let newValue = $("input").val();
+        let newValue = Number($("input").val());
         if (this.onInputChanged) {
             this.onInputChanged(newValue);
         }
