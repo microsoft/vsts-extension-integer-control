@@ -9,13 +9,13 @@
 
 .container > .bowtie-icon {
     font-size: 24px;
-    color: #1ba1e2;
+    color: lightgray;
     margin: 4px 0px 0px 4px;
     cursor: pointer;
 }
 
 .bowtie-icon.focus, .bowtie-icon:hover {
-    color: #78c8ef;
+    color: gray;
 }
 
 .combo {
