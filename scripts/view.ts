@@ -16,10 +16,10 @@ export class View {
     private _init(): void {
 
         var container = $("<div />");
-        container.addClass("container combo input-text-box text emptyBorder");
+        container.addClass("container");
 
         var wrap = $("<div />");
-        wrap.addClass("wrap");
+        wrap.addClass("wrap combo emptyBorder");
 
         var hitcount = $("<input />").attr("type", "number");
         wrap.append(hitcount);
@@ -30,7 +30,7 @@ export class View {
         hitcount.attr("aria-valuenow", this.currentValue);
         hitcount.change(() => {
             this._inputChanged();
-        }).bind('keydown', (evt: JQueryKeyEventObject) => {
+        }).on('keydown', (evt: JQueryKeyEventObject) => {
             if (evt.keyCode == 38) {
                 if (this.onUpTick) {
                     this.onUpTick();
@@ -46,23 +46,34 @@ export class View {
         });
 
         var uptick = $("<div />");
+        uptick.addClass("bowtie-icon bowtie-math-plus-box");
+        uptick.hide();
         uptick.click(() => {
             this.onUpTick();
         });
 
-        uptick.addClass("bowtie-icon bowtie-arrow-up");
-
-
         var downtick = $("<div />");
+        downtick.addClass("bowtie-icon bowtie-math-minus-box");
+        downtick.hide();
         downtick.click(() => {
             this.onDownTick();
         });
 
-        downtick.addClass("bowtie-icon bowtie-arrow-down");
-        wrap.append(downtick);
-        wrap.append(uptick);
-
         container.append(wrap);
+        container.append(downtick);
+        container.append(uptick);
+
+        container.hover(() => {
+            wrap.addClass("border");
+            downtick.show();
+            uptick.show();
+        }, () => {
+            if(!hitcount.is(':focus')) {
+                wrap.removeClass("border");
+                downtick.hide();
+                uptick.hide();
+            }
+        });
 
         $("body").append(container);
     }

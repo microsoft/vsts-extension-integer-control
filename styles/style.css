@@ -1,7 +1,21 @@
-.bowtie-icon {
-    float: right;
-    margin: 3px 5px 3px 3px;
+.container {
+    display: flex;
+    padding-left: 1px;
+}
+
+.wrap {
+    flex-grow: 1;
+}
+
+.container > .bowtie-icon {
+    font-size: 24px;
+    color: #1ba1e2;
+    margin: 4px 0px 0px 4px;
     cursor: pointer;
+}
+
+.bowtie-icon.focus, .bowtie-icon:hover {
+    color: #78c8ef;
 }
 
 .combo {
@@ -12,20 +26,24 @@
     background: #fff;
 }
 
-.combo.focus, .combo:hover {
+.combo:focus, .combo:hover, .combo.border {
     border: 1px solid #e6e6e6;
 }
 
-.combo div.wrap>input[type=number] {
+div.wrap>input[type=number] {
     height: 100%;
-    width: calc(100% - 45px);
+    font-size: 14px;
+    text-overflow: ellipsis;
     border: none;
     outline: none;
 }
 
-.combo input {
+input {
+    width: 100%;
     font-size: 14px;
     text-overflow: ellipsis;
+    border: none;
+    outline: none;
 }
 
 /*
