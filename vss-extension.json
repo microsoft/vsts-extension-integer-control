@@ -2,12 +2,12 @@
     "manifestVersion": 1,
     "id": "hitcount-control",
     "version": "0.1.3",
-    "name": "HitCount Control",
+    "name": "Plus/minus integer control",
     "scopes": [
         "vso.work",
         "vso.work_write"
     ],
-    "description": "Easily change your integer values with a +/- control.",
+    "description": "Easily change your integer values with a plus/minus control.",
     "publisher": "ms-devlabs",
     "icons": {
         "default": "img/logo.png"
@@ -65,13 +65,13 @@
     "contributions": [
         {
             "id": "hitcount-control",
-            "description": "Easily change your integer values with a +/- control.",
+            "description": "Easily change your integer values with a plus/minus control.",
             "type": "ms.vss-work-web.work-item-form-control",
             "targets": [
                 "ms.vss-work-web.work-item-form"
             ],
             "properties": {
-                "name": "Hit Count",
+                "name": "Plus/minus integer control",
                 "uri": "index.html",
                 "height": 28,
                 "inputs": [
