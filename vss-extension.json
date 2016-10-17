@@ -7,7 +7,7 @@
         "vso.work",
         "vso.work_write"
     ],
-    "description": "Easily change your integer values with an up/down control.",
+    "description": "Easily change your integer values with an +/- control.",
     "publisher": "ms-devlabs",
     "icons": {
         "default": "img/logo.png"
@@ -65,6 +65,7 @@
     "contributions": [
         {
             "id": "hitcount-control",
+            "description": "Easily change your integer values with an +/- control.",
             "type": "ms.vss-work-web.work-item-form-control",
             "targets": [
                 "ms.vss-work-web.work-item-form"
