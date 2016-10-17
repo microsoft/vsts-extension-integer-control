@@ -13,11 +13,11 @@
 # How to get started
 ## Visual Studio Team Services
 
-1. Navigate to your work item form customization page and add a Hit Count Control.
+Navigate to your work item form customization page and add a plus/minus integer control.
 
 ![Layout Customization](img/layoutCustomization.png)
 
-2. Edit the control so it can use the right integer field.
+Edit the control so it can use the right integer field.
 
 ![Configuration](img/configuration.png)
 
