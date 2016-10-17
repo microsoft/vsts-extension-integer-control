@@ -77,7 +77,7 @@
                 "inputs": [
                     {
                         "id": "FieldName",
-                        "name": "Backing integer field",
+                        "name": "Select the field for this control. Example: Story Points",
                         "description": "The field associated with the control.",
                         "type": "WorkItemField",
                         "properties": {
