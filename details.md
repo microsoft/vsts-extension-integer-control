@@ -8,7 +8,7 @@
 
 # Increase/decrease counters with a single click
 
-![Control keys](img/logo.PNG)
+![Control keys](img/logo.png)
 
 # How to get started
 ## Visual Studio Team Services
