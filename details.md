@@ -1,4 +1,4 @@
-> This is currently only available on TFS "15" or later and Visual Studio Team Services.
+> This is currently only available on TFS 2017 or later and Visual Studio Team Services.
 
 ![Work Item Form](img/form.png)
 
