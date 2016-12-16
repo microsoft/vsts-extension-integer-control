@@ -1,11 +1,8 @@
 {
   "globalDependencies": {
     "chai": "registry:dt/chai#3.4.0+20160601211834",
-    "jquery": "registry:dt/jquery#1.10.0+20160929162922",
-    "knockout": "registry:dt/knockout#0.0.0+20160914182733",
     "mocha": "registry:dt/mocha#2.2.5+20160720003353",
     "q": "registry:dt/q#0.0.0+20161004185634",
-    "require": "registry:dt/require#2.1.20+20160919185614",
     "tfs": "npm:vss-web-extension-sdk/typings/tfs.d.ts",
     "vss": "npm:vss-web-extension-sdk/typings/vss.d.ts"
   }

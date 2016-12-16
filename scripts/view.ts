@@ -30,14 +30,13 @@ export class View {
         hitcount.attr("aria-valuenow", this.currentValue);
         hitcount.change(() => {
             this._inputChanged();
-        }).on('keydown', (evt: JQueryKeyEventObject) => {
-            if (evt.keyCode == 38) {
+        }).on("keydown", (evt: JQueryKeyEventObject) => {
+            if (evt.keyCode === 38) {
                 if (this.onUpTick) {
                     this.onUpTick();
                     evt.preventDefault();
                 }
-            }
-            else if (evt.keyCode == 40) {
+            } else if (evt.keyCode === 40) {
                 if (this.onDownTick) {
                     this.onDownTick();
                     evt.preventDefault();
@@ -68,7 +67,7 @@ export class View {
             downtick.show();
             uptick.show();
         }, () => {
-            if(!hitcount.is(':focus')) {
+            if (!hitcount.is(":focus")) {
                 wrap.removeClass("border");
                 downtick.hide();
                 uptick.hide();

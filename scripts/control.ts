@@ -2,9 +2,8 @@
 /** The class control.ts will orchestrate the classes of InputParser, Model and View
  *  in order to perform the required actions of the extensions. 
  */
-import * as VSSService from "VSS/Service";
+
 import * as WitService from "TFS/WorkItemTracking/Services";
-import * as ExtensionContracts from "TFS/WorkItemTracking/ExtensionContracts";
 import { Model } from "./model";
 import { View } from "./view";
 import { ErrorView } from "./errorView";
@@ -29,7 +28,7 @@ export class Controller {
                 Q.spread(
                     [service.getFieldValue(this._fieldName)],
                     (currentValue: number) => {
-                        // Dependent on view, model, and inputParser refactoring
+                        // dependent on view, model, and inputParser refactoring
                         this._model = new Model(Number(currentValue));
                         this._view = new View(this._model, (val) => {
                             this._updateInternal(val);
@@ -47,7 +46,7 @@ export class Controller {
     }
 
     private _handleError(error: string): void {
-        let errorView = new ErrorView(error);
+        new ErrorView(error);
     }
 
     private _updateInternal(value: number): void {
@@ -56,7 +55,7 @@ export class Controller {
                 service.setFieldValue(this._fieldName, value).then(
                     () => {
                         this._update(value);
-                    }, this._handleError)
+                    }, this._handleError);
             },
             this._handleError
         );

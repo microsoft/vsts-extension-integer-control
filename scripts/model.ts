@@ -7,14 +7,14 @@ export class Model {
      */
 
     constructor(initialValue: number) {
-        this._currentValue = initialValue; 
+        this._currentValue = initialValue;
     }
 
     private _currentValue: number;
 
     public setCurrentValue(value: number) {
         if (value === undefined) {
-            throw "Undefined value"; 
+            throw "Undefined value";
         }
         this._currentValue = value;
     }

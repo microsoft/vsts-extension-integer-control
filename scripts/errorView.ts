@@ -32,6 +32,6 @@ export class ErrorView {
         help.append(a);
         container.append(help);
 
-        $('body').empty().append(container);
+        $("body").empty().append(container);
     }
 }
