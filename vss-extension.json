@@ -27,6 +27,10 @@
             "path": "details.md"
         }
     },
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/Microsoft/vsts-extension-integer-control"
+    },
     "links": {
         "support": {
             "uri": "https://github.com/Microsoft/vsts-extension-integer-control/issues"
