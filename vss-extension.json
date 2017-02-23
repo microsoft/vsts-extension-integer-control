@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "hitcount-control",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "name": "Plus/minus integer control",
     "scopes": [
         "vso.work",
