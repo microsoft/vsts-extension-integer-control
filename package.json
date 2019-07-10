@@ -1,6 +1,7 @@
 {
   "devDependencies": {
-    "@types/jquery": "^2.0.40",
+    "@types/jquery": "^2.0.48",
+    "@types/q": "0.0.32",
     "@types/knockout": "^3.4.39",
     "@types/react": "^15.0.12",
     "@types/react-dom": "^0.14.23",
@@ -20,9 +21,9 @@
     "karma-requirejs": "^1.1.0",
     "mocha": "^3.1.2",
     "requirejs": "^2.3.2",
-    "typescript": "^2.1.4",
-    "typings": "^1.4.0",
-    "vss-web-extension-sdk": "^1.106.0"
+    "typescript": "^2.9.2",
+    "typings": "^2.1.1",
+    "vss-web-extension-sdk": "^5.141.0"
   },
   "name": "hitcount-control",
   "private": true,

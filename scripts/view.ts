@@ -14,6 +14,8 @@ export class View {
     }
 
     private _init(): void {
+        // remove the existing container from body before continuing
+        $(".container").remove();
 
         var container = $("<div />");
         container.addClass("container");
