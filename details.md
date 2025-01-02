@@ -10,7 +10,8 @@
 
 ![Control keys](img/logo.png)
 
-# How to get started
+# Documentation
+
 ## Azure DevOps Services
 
 Navigate to your work item form customization page and add a plus/minus integer control.
@@ -43,11 +44,12 @@ You can also learn how to build your own custom control extension for the work i
 
 We thank the following contributor(s) for this extension: Alison Chow, Maria McLaughlin and Nelson Troncoso Aldas. 
 
-# Feedback 
+# Support
 
-We need your feedback! Here are some ways to connect with us:
+## How to file issues and get help
 
-* Add a review below.
-* Report issues in [GitHub](https://github.com/Microsoft/vsts-extension-integer-control/issues).
+This project uses [GitHub Issues](https://github.com/Microsoft/vsts-extension-integer-control/issues) to track bugs and feature requests. Please search the existing issues before filing new issues to avoid duplicates. For new issues, file your bug or feature request as a new Issue. 
 
-> Microsoft DevLabs is an outlet for experiments from Microsoft, experiments that represent some of the latest ideas around developer tools. Solutions in this category are designed for broad usage, and you are encouraged to use and provide feedback on them; however, these extensions are not supported nor are any commitments made as to their longevity.
+## Microsoft Support Policy
+
+Support for this project is limited to the resources listed above
