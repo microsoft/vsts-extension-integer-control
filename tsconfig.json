@@ -8,7 +8,9 @@
         "types": [
             "jquery",
             "q",
-            "vss-web-extension-sdk"
+            "vss-web-extension-sdk",
+            "mocha"
+
         ],
         "lib": [
             "dom",
