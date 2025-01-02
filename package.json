@@ -30,6 +30,8 @@
   "private": true,
   "version": "0.5.0",
   "scripts": {
-    "postinstall": ""
+    "preinstall": "npm i grunt -g && npm i tfx-cli -g",
+    "clean:vsix": "rimraf **/*.vsix",
+    "build:release": "npm run clean:vsix && grunt build --force"
   }
 }

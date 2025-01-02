@@ -32,7 +32,7 @@ You have now installed the extension inside your collection.  You are now able t
     ```
     witadmin exportwitd /collection:CollectionURL /p:Project /n:TypeName /f:FileName
     ```
-2. This creates a file in the directory that you specified.  Inside this file, navigate to the section called "Work Item Extensions".  This section shows the documentation of the control such as the inputs and ids.  All this information was defined in the manifest, *vss-extension.json*.
+2. This creates a file in the directory that you specified.  Inside this file, navigate to the section called "Work Item Extensions".  This section shows the documentation of the control such as the inputs and ids.  All this information was defined in the manifest, *azure-devops-extension.json*.
 
     ```xml
         <!--**********************************Work Item Extensions***************************
@@ -167,7 +167,7 @@ WitService.WorkItemFormService.getService().then(
 /typings            - Typescript typings
 
 index.html          - Main entry point
-vss-extension.json  - Extension manifest
+azure-devops-extension.json  - Extension manifest
 ```
 
 #### Grunt ####
