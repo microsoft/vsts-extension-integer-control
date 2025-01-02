@@ -32,7 +32,7 @@ If you want to use this extension for an older version of TFS then you need to m
        "Plan and Track"
     ],
 
-[Learn more](https://github.com/Microsoft/vsts-extension-integer-control/blob/master/README.md) about how to customize the integer control directly on XML.
+[Learn more](https://learn.microsoft.com/en-us/azure/devops/extend/develop/configure-workitemform-extensions) about how to customize the integer control for an XML based work item process.
 
 # Source code 
 
