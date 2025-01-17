@@ -1,4 +1,4 @@
-> This is currently only available on TFS 2017 or later and Visual Studio Team Services.
+> This extension is currently only available on Azure DevOps Services and Azure DevOps Server 2019 or later.
 
 ![Work Item Form](img/form.png)
 
@@ -10,8 +10,9 @@
 
 ![Control keys](img/logo.png)
 
-# How to get started
-## Visual Studio Team Services
+# Documentation
+
+## Azure DevOps Services
 
 Navigate to your work item form customization page and add a plus/minus integer control.
 
@@ -21,11 +22,17 @@ Edit the control so it can use the right integer field.
 
 ![Configuration](img/configuration.png)
 
-## TFS On-Premise 
+## Azure DevOps/TFS On-Premise 
 
-We recommend TFS 2015 RC2 and higher when running this extension.
+The version published to the Azure DevOps Marketplace only supports Azure DevOps Server 2019.
 
-[Learn more](https://github.com/Microsoft/vsts-extension-integer-control/blob/master/README.md) about how to customize the integer control directly on XML.
+If you want to use this extension for an older version of TFS then you need to manually build and publish the extension after changing the category in the extension manifest to:
+
+    "categories": [
+       "Plan and Track"
+    ],
+
+[Learn more](https://learn.microsoft.com/en-us/azure/devops/extend/develop/configure-workitemform-extensions) about how to customize the integer control for an XML based work item process.
 
 # Source code 
 
@@ -37,11 +44,12 @@ You can also learn how to build your own custom control extension for the work i
 
 We thank the following contributor(s) for this extension: Alison Chow, Maria McLaughlin and Nelson Troncoso Aldas. 
 
-# Feedback 
+# Support
 
-We need your feedback! Here are some ways to connect with us:
+## How to file issues and get help
 
-* Add a review below.
-* Report issues in [GitHub](https://github.com/Microsoft/vsts-extension-integer-control/issues).
+This project uses [GitHub Issues](https://github.com/Microsoft/vsts-extension-integer-control/issues) to track bugs and feature requests. Please search the existing issues before filing new issues to avoid duplicates. For new issues, file your bug or feature request as a new Issue. 
 
-> Microsoft DevLabs is an outlet for experiments from Microsoft, experiments that represent some of the latest ideas around developer tools. Solutions in this category are designed for broad usage, and you are encouraged to use and provide feedback on them; however, these extensions are not supported nor are any commitments made as to their longevity.
+## Microsoft Support Policy
+
+Support for this project is limited to the resources listed above
