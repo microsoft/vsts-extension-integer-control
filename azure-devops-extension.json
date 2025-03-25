@@ -25,6 +25,9 @@
     "content": {
         "details": {
             "path": "details.md"
+        },
+        "license": {
+            "path": "LICENSE"
         }
     },
     "repository": {
