@@ -38,9 +38,6 @@
         "support": {
             "uri": "https://github.com/Microsoft/vsts-extension-integer-control/issues"
         },
-        "learn": {
-            "uri": "https://github.com/Microsoft/vsts-extension-integer-control/blob/master/README.md"
-        },
         "repository": {
             "uri": "https://github.com/Microsoft/vsts-extension-integer-control"
         },
