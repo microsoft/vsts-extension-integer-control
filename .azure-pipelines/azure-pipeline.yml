@@ -36,6 +36,10 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '22.x'    
+
     - template: build.yml@pipeline-templates
     - template: package.yml@pipeline-templates
       parameters:
@@ -54,6 +58,7 @@ stages:
       marketplaceConnectedServiceName: $(marketplaceServiceConnection)
       publisherId: $(publisherId)
       publicExtensionName: $(publicExtensionName)
+      updateTaskVersion: true
 
 - stage: 'DeployTest'
   displayName: 'Deploy to Test'
@@ -67,6 +72,7 @@ stages:
       marketplaceConnectedServiceName: $(marketplaceServiceConnection)
       publisherId: $(publisherId)
       publicExtensionName: $(publicExtensionName)
+      updateTaskVersion: true
 
 - stage: 'DeployRelease'
   displayName: 'Deploy Release'
@@ -81,3 +87,4 @@ stages:
       publisherId: $(publisherId)
       publicExtensionName: $(publicExtensionName)
       extensionVisibility: 'public'
+      updateTaskVersion: true

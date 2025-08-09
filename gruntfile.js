@@ -15,22 +15,22 @@
         },
         exec: {
             package_dev: {
-                command: "tfx extension create --manifest-globs azure-devops-extension.json --rev-version --overrides-file configs/dev.json",
+                command: "npx tfx extension create --manifest-globs azure-devops-extension.json --rev-version --overrides-file configs/dev.json",
                 stdout: true,
                 stderr: true
             },
             package_release: {
-                command: "tfx extension create --manifest-globs azure-devops-extension.json --rev-version --overrides-file configs/release.json",
+                command: "npx tfx extension create --manifest-globs azure-devops-extension.json --rev-version --overrides-file configs/release.json",
                 stdout: true,
                 stderr: true
             },
             publish_dev: {
-                command: "tfx extension publish --service-url https://marketplace.visualstudio.com  --manifest-globs azure-devops-extension.json --overrides-file configs/dev.json",
+                command: "npx tfx extension publish --service-url https://marketplace.visualstudio.com  --manifest-globs azure-devops-extension.json --overrides-file configs/dev.json",
                 stdout: true,
                 stderr: true
             },
             publish_release: {
-                command: "tfx extension publish --service-url https://marketplace.visualstudio.com --manifest-globs azure-devops-extension.json --overrides-file configs/release.json",
+                command: "npx tfx extension publish --service-url https://marketplace.visualstudio.com --manifest-globs azure-devops-extension.json --overrides-file configs/release.json",
                 stdout: true,
                 stderr: true
             }
