@@ -53,7 +53,7 @@
             unit: {
                 configFile: 'karma.conf.js',
                 singleRun: true,
-                browsers: ["PhantomJS"]
+                browsers: ["ChromeHeadless"]
             }
         }
     });

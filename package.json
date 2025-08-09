@@ -1,6 +1,5 @@
 {
   "devDependencies": {
-    "@types/jest": "^26.0.24",
     "@types/jquery": "^3.5.31",
     "@types/knockout": "^3.4.77",
     "@types/mocha": "^8.2.3",
@@ -14,12 +13,12 @@
     "grunt-exec": "^3.0.0",
     "grunt-karma": "^4.0.2",
     "grunt-ts": "^6.0.0-beta.22",
-    "karma": "^6.4.4",
+    "karma": "^4.4.1",
     "karma-chai": "^0.1.0",
-    "karma-mocha": "^2.0.1",
+    "karma-mocha": "^1.3.0",
     "karma-chrome-launcher": "^3.2.0",
     "karma-requirejs": "^1.1.0",
-    "mocha": "^8.4.0",
+    "mocha": "^6.2.3",
     "requirejs": "^2.3.7",
     "rimraf": "^6.0.1",
     "tfx-cli": "^0.21.1",
@@ -31,6 +30,8 @@
   "version": "0.5.0",
   "scripts": {
     "clean:vsix": "rimraf **/*.vsix",
-    "build:release": "npm run clean:vsix && grunt build --force"
-    }
+    "build:release": "npm run clean:vsix && grunt build --force",
+    "test": "grunt test",
+    "build": "grunt build"
+  }
 }
