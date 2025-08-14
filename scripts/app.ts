@@ -3,7 +3,7 @@ import { IWorkItemLoadedArgs, IWorkItemFieldChangedArgs } from "TFS/WorkItemTrac
 import { WorkItemFormService } from "TFS/WorkItemTracking/Services";
 
 // save on ctr + s
-$(window).bind("keydown", function (event: JQueryEventObject) {
+$(window).bind("keydown", function (event: any) {
     if (event.ctrlKey || event.metaKey) {
         if (String.fromCharCode(event.which) === "S") {
             event.preventDefault();
