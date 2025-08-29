@@ -55,17 +55,41 @@ export class Controller {
     }
 
     private async initializeServiceAsync(): Promise<void> {
+        // Add a longer delay to ensure work item form is fully loaded
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
         try {
             // Wait for SDK to be fully ready
             await SDK.ready();
-            await this.initializeService();
-            const currentValue = await this.getFieldValue();
-            const numValue = Number(currentValue) || 0;
-            this.model.setCurrentValue(numValue);
-            this.view.update(numValue);
-            console.log("Loaded current field value:", numValue);
+            
+            // Try multiple times with increasing delays
+            for (let attempt = 1; attempt <= 3; attempt++) {
+                try {
+                    console.log(`Service initialization attempt ${attempt}/3`);
+                    await this.initializeService();
+                    
+                    // If we get here, service initialization succeeded
+                    const currentValue = await this.getFieldValue();
+                    const numValue = Number(currentValue) || 0;
+                    this.model.setCurrentValue(numValue);
+                    this.view.update(numValue);
+                    console.log("Loaded current field value:", numValue);
+                    return; // Success!
+                    
+                } catch (serviceError) {
+                    console.warn(`Service initialization attempt ${attempt} failed:`, serviceError);
+                    if (attempt < 3) {
+                        console.log(`Waiting ${attempt * 2} seconds before retry...`);
+                        await new Promise(resolve => setTimeout(resolve, attempt * 2000));
+                    }
+                }
+            }
+            
+            throw new Error("All service initialization attempts failed");
+            
         } catch (error) {
             console.warn("Could not load current field value, will work in offline mode:", error);
+            console.log("Extension will still work for local increment/decrement operations");
             // Extension will still work for incrementing/decrementing, just won't sync with work item
         }
     }
@@ -73,16 +97,30 @@ export class Controller {
     private async initializeService(): Promise<void> {
         try {
             console.log("Attempting to get work item form service...");
+            console.log("Current host:", SDK.getHost());
+            console.log("Extension context:", SDK.getExtensionContext());
             
-            // Use the most common service identifier
+            // Try the standard service identifier
             this.workItemFormService = await SDK.getService("ms.vss-work-web.work-item-form-service");
             
-            if (this.workItemFormService) {
+            // Test that the service actually works
+            if (this.workItemFormService && typeof this.workItemFormService.getFieldValue === 'function') {
                 console.log("Work item form service initialized successfully");
+                console.log("Service methods:", Object.getOwnPropertyNames(this.workItemFormService));
+                
+                // Test the service with a quick call
+                try {
+                    const testValue = await this.workItemFormService.getFieldValue(this.fieldName);
+                    console.log("Service test successful, current value:", testValue);
+                } catch (testError) {
+                    console.warn("Service test failed:", testError);
+                }
                 return;
+            } else {
+                console.log("Service returned but missing expected methods:", this.workItemFormService);
             }
         } catch (error) {
-            console.warn("Failed to get work item form service:", error);
+            console.warn("Standard service access failed:", error);
         }
         
         throw new Error("Work item form service not available");
