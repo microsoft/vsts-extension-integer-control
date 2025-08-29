@@ -1,0 +1,46 @@
+/* ADO Native Component Styling - Minimal overrides */
+.bolt-textfield-container {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    overflow: visible !important;
+}
+
+.bolt-textfield {
+    flex: 1 !important;
+    overflow: visible !important;
+}
+
+.bolt-textfield-input {
+    overflow: visible !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+.bolt-textfield-input::-webkit-scrollbar {
+    display: none !important;
+}
+
+.bolt-button-group {
+    display: flex !important;
+    gap: 2px !important;
+    overflow: visible !important;
+}
+
+.bolt-button.bolt-button-subtle {
+    min-width: 32px !important;
+    padding: 4px 8px !important;
+    font-family: monospace !important;
+    font-weight: bold !important;
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+    overflow: visible !important;
+}
+
+/* Ensure ADO components don't get affected by any global overflow rules */
+.bolt-textfield,
+.bolt-textfield-input,
+.bolt-button {
+    overflow: visible !important;
+    scrollbar-width: none !important;
+}

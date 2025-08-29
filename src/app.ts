@@ -1,6 +1,9 @@
 import * as SDK from "azure-devops-extension-sdk";
 import { Controller } from "./control";
 
+// Import CSS - webpack will handle this
+import '../styles/style-ado-native.css';
+
 // Work Item Form Control implementation
 class WorkItemFormControl {
     private controller: Controller | null = null;

@@ -3,14 +3,16 @@ import { getClient } from "azure-devops-extension-api";
 import { WorkItemTrackingRestClient, WorkItemExpand } from "azure-devops-extension-api/WorkItemTracking";
 import { Model } from "./model";
 import { View } from "./view";
+import { ViewAdoNative } from "./view-ado-native";
 import { ErrorView } from "./errorView";
 
 export class Controller {
     private fieldName: string = "";
     private model!: Model;
-    private view!: View;
+    private view!: View | ViewAdoNative;
     private workItemId: number = 0;
     private witClient: WorkItemTrackingRestClient | null = null;
+    private useAdoNative: boolean = true; // Set to false to use original styling
 
     constructor() {
         this.initialize();
@@ -27,18 +29,34 @@ export class Controller {
 
             this.model = new Model(0);
             
-            this.view = new View(
-                this.model,
-                (val) => this.updateInternal(val),
-                () => {
-                    this.model.incrementValue();
-                    this.updateInternal(this.model.getCurrentValue());
-                },
-                () => {
-                    this.model.decrementValue();
-                    this.updateInternal(this.model.getCurrentValue());
-                }
-            );
+            // Choose which view to use
+            if (this.useAdoNative) {
+                this.view = new ViewAdoNative(
+                    this.model,
+                    (val) => this.updateInternal(val),
+                    () => {
+                        this.model.incrementValue();
+                        this.updateInternal(this.model.getCurrentValue());
+                    },
+                    () => {
+                        this.model.decrementValue();
+                        this.updateInternal(this.model.getCurrentValue());
+                    }
+                );
+            } else {
+                this.view = new View(
+                    this.model,
+                    (val) => this.updateInternal(val),
+                    () => {
+                        this.model.incrementValue();
+                        this.updateInternal(this.model.getCurrentValue());
+                    },
+                    () => {
+                        this.model.decrementValue();
+                        this.updateInternal(this.model.getCurrentValue());
+                    }
+                );
+            }
 
             await this.initializeRestClient();
             
