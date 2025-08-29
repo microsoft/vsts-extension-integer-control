@@ -71,7 +71,7 @@
     border: 1px solid #e6e6e6;
 }
 
-.hitcount-extension-root div.wrap>input[type=number] {
+.hitcount-extension-root div.wrap>input[type=text] {
     height: 100%;
     font-size: 14px;
     text-overflow: ellipsis;
@@ -93,15 +93,15 @@
 }
 
 /*
- * Remove up/down arrows on input type=number - scoped
+ * Remove up/down arrows on input - not needed for text type but keep for consistency
  */
-.hitcount-extension-root input[type="number"]::-webkit-outer-spin-button,
-.hitcount-extension-root input[type="number"]::-webkit-inner-spin-button {
+.hitcount-extension-root input[type="text"]::-webkit-outer-spin-button,
+.hitcount-extension-root input[type="text"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-.hitcount-extension-root input[type="number"] {
+.hitcount-extension-root input[type="text"] {
     -moz-appearance: textfield;
     appearance: textfield;
 }

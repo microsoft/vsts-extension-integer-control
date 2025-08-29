@@ -60,9 +60,11 @@ export class View {
             return false;
         }, { passive: false });
 
-        // Create number input
+        // Create number input - use text type to avoid browser number input quirks
         const input = document.createElement('input');
-        input.type = 'number';
+        input.type = 'text';
+        input.inputMode = 'numeric';
+        input.pattern = '[0-9]*';
         this.currentValue = String(this.model.getCurrentValue());
         input.value = this.currentValue;
         input.setAttribute('aria-valuenow', this.currentValue);
@@ -77,14 +79,57 @@ export class View {
         // Disable mouse wheel scrolling on the input
         input.addEventListener('wheel', preventScroll, { passive: false });
         
-        // Handle keydown for arrow keys - but don't prevent them, just control them
+        // Add input validation for numbers only
+        input.addEventListener('input', (evt) => {
+            const target = evt.target as HTMLInputElement;
+            let value = target.value;
+            
+            // Remove any non-digit characters except minus sign at the beginning
+            value = value.replace(/[^-0-9]/g, '');
+            
+            // Ensure minus sign only at the beginning
+            if (value.indexOf('-') > 0) {
+                value = value.replace(/-/g, '');
+            }
+            
+            // Update the input value
+            target.value = value;
+            
+            // Also call our debounced change handler
+            this.inputChangedWithDebounce();
+        });
+        
+        // Prevent non-numeric characters from being typed
         input.addEventListener('keydown', (evt) => {
+            // Allow special keys: backspace, delete, tab, escape, enter, home, end, left, right
+            if ([8, 9, 27, 13, 46, 35, 36, 37, 39].indexOf(evt.keyCode) !== -1 ||
+                // Allow Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+                (evt.keyCode === 65 && evt.ctrlKey) ||
+                (evt.keyCode === 67 && evt.ctrlKey) ||
+                (evt.keyCode === 86 && evt.ctrlKey) ||
+                (evt.keyCode === 88 && evt.ctrlKey)) {
+                return;
+            }
+            
+            // Allow minus sign only at the beginning
+            if (evt.key === '-' && input.selectionStart === 0) {
+                return;
+            }
+            
+            // Allow arrow keys for our custom increment/decrement
             if (evt.key === 'ArrowUp') {
-                evt.preventDefault(); // Prevent native increment
-                this.handleKeyDown(evt); // Use our custom handler
+                evt.preventDefault();
+                this.handleKeyDown(evt);
+                return;
             } else if (evt.key === 'ArrowDown') {
-                evt.preventDefault(); // Prevent native decrement
-                this.handleKeyDown(evt); // Use our custom handler
+                evt.preventDefault();
+                this.handleKeyDown(evt);
+                return;
+            }
+            
+            // Ensure that it is a number and stop the keypress
+            if ((evt.shiftKey || (evt.keyCode < 48 || evt.keyCode > 57)) && (evt.keyCode < 96 || evt.keyCode > 105)) {
+                evt.preventDefault();
             }
         });
 
