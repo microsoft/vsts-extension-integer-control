@@ -1,21 +1,13 @@
 import * as SDK from "azure-devops-extension-sdk";
-import { getClient } from "azure-devops-extension-api";
-import { WorkItemTrackingRestClient } from "azure-devops-extension-api/WorkItemTracking";
 import { Model } from "./model";
 import { View } from "./view";
 import { ErrorView } from "./errorView";
-
-interface IWorkItemFormService {
-    getFieldValue(fieldReferenceName: string): Promise<any>;
-    setFieldValue(fieldReferenceName: string, value: any): Promise<void>;
-    beginSaveWorkItem(successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void>;
-}
 
 export class Controller {
     private fieldName: string = "";
     private model!: Model;
     private view!: View;
-    private workItemFormService: IWorkItemFormService | null = null;
+    private workItemFormService: any = null;
 
     constructor() {
         this.initialize();
@@ -25,14 +17,15 @@ export class Controller {
         try {
             // Get the configuration inputs
             const config = SDK.getConfiguration();
+            console.log("SDK Configuration:", config);
+            
             this.fieldName = config.witInputs?.["FieldName"] || "";
 
             if (!this.fieldName) {
-                throw new Error("FieldName input is required");
+                throw new Error("FieldName input is required. Make sure the extension is configured with a field.");
             }
 
             console.log("Initializing controller for field:", this.fieldName);
-            console.log("Configuration:", config);
 
             // Initialize the model with a default value
             this.model = new Model(0);
@@ -63,6 +56,8 @@ export class Controller {
 
     private async initializeServiceAsync(): Promise<void> {
         try {
+            // Wait for SDK to be fully ready
+            await SDK.ready();
             await this.initializeService();
             const currentValue = await this.getFieldValue();
             const numValue = Number(currentValue) || 0;
@@ -75,50 +70,22 @@ export class Controller {
         }
     }
 
-    private async initializeService(retries: number = 5): Promise<void> {
-        for (let i = 0; i < retries; i++) {
-            try {
-                console.log(`Attempting to get work item form service, attempt ${i + 1}/${retries}`);
-                
-                // Try different service identifiers
-                const serviceIds = [
-                    "ms.vss-work-web.work-item-form-service",
-                    "ms.vss-work-web.work-item-form",
-                    "workItemFormService"
-                ];
-
-                for (const serviceId of serviceIds) {
-                    try {
-                        console.log(`Trying service ID: ${serviceId}`);
-                        this.workItemFormService = await SDK.getService<IWorkItemFormService>(serviceId);
-                        
-                        if (this.workItemFormService) {
-                            console.log(`Work item form service initialized successfully with ID: ${serviceId}`);
-                            return;
-                        }
-                    } catch (serviceError) {
-                        console.warn(`Service ID ${serviceId} failed:`, serviceError);
-                    }
-                }
-
-            } catch (error) {
-                console.warn(`Failed to get work item form service, attempt ${i + 1}/${retries}:`, error);
-            }
-            
-            if (i < retries - 1) {
-                await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1s before retry
-            }
-        }
-        
-        // List available services for debugging
+    private async initializeService(): Promise<void> {
         try {
-            console.log("Available SDK services:", Object.keys(SDK));
-            console.log("SDK configuration:", SDK.getConfiguration());
-        } catch (e) {
-            console.log("Could not list SDK services:", e);
+            console.log("Attempting to get work item form service...");
+            
+            // Use the most common service identifier
+            this.workItemFormService = await SDK.getService("ms.vss-work-web.work-item-form-service");
+            
+            if (this.workItemFormService) {
+                console.log("Work item form service initialized successfully");
+                return;
+            }
+        } catch (error) {
+            console.warn("Failed to get work item form service:", error);
         }
         
-        throw new Error("Failed to initialize work item form service after multiple attempts. The extension may not be running in a work item context.");
+        throw new Error("Work item form service not available");
     }
 
     private async getFieldValue(): Promise<any> {
