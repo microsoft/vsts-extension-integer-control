@@ -33,6 +33,14 @@ export class ViewAdoNative {
         this.container.style.display = 'flex';
         this.container.style.alignItems = 'center';
         this.container.style.gap = '8px';
+        this.container.style.overflow = 'hidden';
+        this.container.style.maxWidth = '100%';
+        this.container.style.maxHeight = '100%';
+        this.container.style.boxSizing = 'border-box';
+        
+        // Aggressively prevent scrollbars
+        this.container.style.scrollbarWidth = 'none';
+        (this.container.style as any).msOverflowStyle = 'none';
 
         // Create the main input using ADO classes
         const inputGroup = document.createElement('div');
@@ -123,6 +131,34 @@ export class ViewAdoNative {
         // Assemble the UI
         this.container.appendChild(inputGroup);
         this.container.appendChild(buttonGroup);
+        
+        // Remove scrollbars from parent containers after a short delay
+        setTimeout(() => {
+            this.removeScrollbarsFromParents();
+        }, 100);
+    }
+    
+    private removeScrollbarsFromParents(): void {
+        // Find and modify parent containers that might have scrollbars
+        let parent = this.container.parentElement;
+        while (parent) {
+            if (parent.style) {
+                parent.style.overflow = 'hidden';
+                parent.style.scrollbarWidth = 'none';
+                (parent.style as any).msOverflowStyle = 'none';
+                parent.style.maxWidth = '100%';
+                parent.style.boxSizing = 'border-box';
+            }
+            
+            // Stop at certain container types to avoid affecting too much
+            if (parent.classList.contains('work-item-form') || 
+                parent.classList.contains('tab-content') ||
+                parent.tagName.toLowerCase() === 'body') {
+                break;
+            }
+            
+            parent = parent.parentElement;
+        }
     }
 
     private handleKeyDown(evt: KeyboardEvent): void {

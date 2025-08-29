@@ -3,28 +3,36 @@
     display: flex !important;
     align-items: center !important;
     gap: 8px !important;
-    overflow: visible !important;
+    overflow: hidden !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
 }
 
 .bolt-textfield {
     flex: 1 !important;
-    overflow: visible !important;
+    overflow: hidden !important;
+    max-width: 100% !important;
 }
 
 .bolt-textfield-input {
-    overflow: visible !important;
+    overflow: hidden !important;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 .bolt-textfield-input::-webkit-scrollbar {
     display: none !important;
+    width: 0 !important;
+    height: 0 !important;
 }
 
 .bolt-button-group {
     display: flex !important;
     gap: 2px !important;
-    overflow: visible !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
 }
 
 .bolt-button.bolt-button-subtle {
@@ -34,13 +42,57 @@
     font-weight: bold !important;
     font-size: 14px !important;
     line-height: 1.2 !important;
-    overflow: visible !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
 }
 
-/* Ensure ADO components don't get affected by any global overflow rules */
-.bolt-textfield,
-.bolt-textfield-input,
-.bolt-button {
-    overflow: visible !important;
+/* Aggressively hide ALL scrollbars in the extension container and parents */
+#control-container,
+#control-container *,
+.bolt-textfield-container,
+.bolt-textfield-container * {
+    overflow: hidden !important;
     scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+#control-container::-webkit-scrollbar,
+#control-container *::-webkit-scrollbar,
+.bolt-textfield-container::-webkit-scrollbar,
+.bolt-textfield-container *::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+}
+
+/* Target the parent containers that might be causing scrollbars */
+.work-item-form-control-container,
+.work-item-form-control,
+.control-container {
+    overflow: hidden !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+.work-item-form-control-container::-webkit-scrollbar,
+.work-item-form-control::-webkit-scrollbar,
+.control-container::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* Ensure no element can create scrollbars */
+* {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+*::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
 }
