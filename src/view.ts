@@ -28,7 +28,9 @@ export class View {
             document.body.appendChild(this.container);
         }
         
-        // Use the original container styling - much more minimal
+        // Use the original container styling - much more minimal but with flexbox
+        this.container.style.display = 'flex';
+        this.container.style.alignItems = 'center';
         this.container.style.paddingLeft = '1px';
         this.container.style.overflow = 'hidden';
         this.container.style.overflowX = 'hidden';

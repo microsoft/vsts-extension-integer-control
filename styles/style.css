@@ -1,5 +1,6 @@
 .container {
-    display: flex;
+    display: flex !important;
+    align-items: center !important;
     padding-left: 1px;
     overflow: hidden !important;
 }
@@ -10,10 +11,15 @@
 }
 
 .container > .bowtie-icon {
-    font-size: 24px;
-    color: lightgray;
-    margin: 4px 0px 0px 4px;
+    font-size: 12px;
+    color: #666;
+    margin: 0px 2px;
     cursor: pointer;
+    padding: 2px;
+    user-select: none;
+    vertical-align: middle;
+    display: inline-block;
+    flex-shrink: 0;
 }
 
 .bowtie-icon.focus, .bowtie-icon:hover {
