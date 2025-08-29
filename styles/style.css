@@ -3,6 +3,9 @@
     align-items: center !important;
     padding-left: 1px;
     overflow: hidden !important;
+    margin: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .wrap {
@@ -11,15 +14,16 @@
 }
 
 .container > .bowtie-icon {
-    font-size: 12px;
+    font-size: 16px;
     color: #666;
     margin: 0px 2px;
     cursor: pointer;
-    padding: 2px;
+    padding: 6px;
     user-select: none;
     vertical-align: middle;
     display: inline-block;
     flex-shrink: 0;
+    line-height: 1;
 }
 
 .bowtie-icon.focus, .bowtie-icon:hover {
@@ -32,6 +36,9 @@
     position: relative;
     padding-left: 2px;
     background: #fff;
+    margin: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .combo:focus, .combo:hover, .combo.border {
@@ -52,6 +59,11 @@ input {
     text-overflow: ellipsis;
     border: none;
     outline: none;
+    margin: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 /*

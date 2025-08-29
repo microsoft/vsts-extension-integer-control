@@ -92,24 +92,24 @@ export class View {
 
         wrap.appendChild(input);
 
-        // Create increment button - make it smaller and more subtle
+        // Create increment button - make it bigger
         const uptick = document.createElement('div');
         uptick.className = 'bowtie-icon bowtie-math-plus-box';
         uptick.style.display = 'inline-block';
         uptick.style.cursor = 'pointer';
-        uptick.style.fontSize = '12px';
+        uptick.style.fontSize = '16px';
         uptick.style.color = '#666';
-        uptick.style.padding = '2px';
+        uptick.style.padding = '6px';
         uptick.style.userSelect = 'none';
         uptick.style.marginLeft = '4px';
         uptick.style.verticalAlign = 'middle';
         uptick.title = 'Increment value';
         
-        // Fallback text if icon doesn't load - smaller
+        // Fallback text if icon doesn't load - bigger
         if (!uptick.textContent) {
             uptick.textContent = '+';
             uptick.style.fontWeight = 'bold';
-            uptick.style.fontSize = '10px';
+            uptick.style.fontSize = '14px';
         }
         
         uptick.addEventListener('click', () => {
@@ -118,24 +118,24 @@ export class View {
             }
         });
 
-        // Create decrement button - make it smaller and more subtle
+        // Create decrement button - make it bigger
         const downtick = document.createElement('div');
         downtick.className = 'bowtie-icon bowtie-math-minus-box';
         downtick.style.display = 'inline-block';
         downtick.style.cursor = 'pointer';
-        downtick.style.fontSize = '12px';
+        downtick.style.fontSize = '16px';
         downtick.style.color = '#666';
-        downtick.style.padding = '2px';
+        downtick.style.padding = '6px';
         downtick.style.userSelect = 'none';
         downtick.style.marginLeft = '4px';
         downtick.style.verticalAlign = 'middle';
         downtick.title = 'Decrement value';
         
-        // Fallback text if icon doesn't load - smaller
+        // Fallback text if icon doesn't load - bigger
         if (!downtick.textContent) {
             downtick.textContent = '-';
             downtick.style.fontWeight = 'bold';
-            downtick.style.fontSize = '10px';
+            downtick.style.fontSize = '14px';
         }
         
         downtick.addEventListener('click', () => {
