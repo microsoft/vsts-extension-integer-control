@@ -28,15 +28,18 @@ export class View {
             document.body.appendChild(this.container);
         }
         
-        // Minimal container styling to preserve Azure DevOps look
-        this.container.style.paddingTop = '8px';
-        this.container.style.paddingBottom = '8px';
+        // Style the container for better layout (restore the working layout)
+        this.container.style.display = 'flex';
+        this.container.style.alignItems = 'center';
+        this.container.style.gap = '8px';
+        this.container.style.padding = '8px';
 
         // Create input wrapper
         const wrap = document.createElement('div');
         wrap.className = 'wrap combo emptyBorder';
-        wrap.style.marginTop = '8px';
-        wrap.style.marginBottom = '8px';
+        wrap.style.display = 'inline-block';
+        wrap.style.marginRight = '8px';
+        wrap.style.verticalAlign = 'top';
 
         // Create number input
         const input = document.createElement('input');
@@ -45,16 +48,33 @@ export class View {
         input.value = this.currentValue;
         input.setAttribute('aria-valuenow', this.currentValue);
         
-        // Minimal styling - let Azure DevOps styles take precedence
+        // Minimal styling - let Azure DevOps styles take precedence, but add some margin
         input.style.marginTop = '8px';
         input.style.marginBottom = '8px';
         
-        // Disable mouse wheel scrolling on the input
+        // Disable mouse wheel scrolling on the input - multiple approaches
         input.addEventListener('wheel', (evt) => {
             evt.preventDefault();
+            evt.stopPropagation();
+            return false;
+        }, { passive: false });
+        
+        // Also disable on mousewheel (older browsers)
+        input.addEventListener('mousewheel', (evt) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            return false;
+        }, { passive: false });
+        
+        // Disable scrolling when input is focused
+        input.addEventListener('focus', () => {
+            input.addEventListener('wheel', (evt) => {
+                evt.preventDefault();
+                evt.stopPropagation();
+            }, { passive: false });
         });
         
-        // Prevent arrow keys from changing the value when not focused
+        // Handle keydown for arrow keys
         input.addEventListener('keydown', (evt) => {
             if (evt.key === 'ArrowUp' || evt.key === 'ArrowDown') {
                 this.handleKeyDown(evt);
