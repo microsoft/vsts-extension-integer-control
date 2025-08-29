@@ -1,4 +1,6 @@
 import * as SDK from "azure-devops-extension-sdk";
+import { getClient } from "azure-devops-extension-api";
+import { WorkItemTrackingRestClient } from "azure-devops-extension-api/WorkItemTracking";
 import { Model } from "./model";
 import { View } from "./view";
 import { ErrorView } from "./errorView";
@@ -29,14 +31,11 @@ export class Controller {
                 throw new Error("FieldName input is required");
             }
 
-            // Get the work item form service with retry
-            await this.initializeService();
-            
-            // Get the current field value
-            const currentValue = await this.getFieldValue();
-            
-            // Initialize the model
-            this.model = new Model(Number(currentValue) || 0);
+            console.log("Initializing controller for field:", this.fieldName);
+            console.log("Configuration:", config);
+
+            // Initialize the model with a default value
+            this.model = new Model(0);
             
             // Initialize the view
             this.view = new View(
@@ -52,26 +51,74 @@ export class Controller {
                 }
             );
 
+            console.log("View initialized successfully");
+
+            // Try to initialize service and load current value in background
+            this.initializeServiceAsync();
+
         } catch (error) {
             this.handleError(error);
         }
     }
 
-    private async initializeService(retries: number = 3): Promise<void> {
+    private async initializeServiceAsync(): Promise<void> {
+        try {
+            await this.initializeService();
+            const currentValue = await this.getFieldValue();
+            const numValue = Number(currentValue) || 0;
+            this.model.setCurrentValue(numValue);
+            this.view.update(numValue);
+            console.log("Loaded current field value:", numValue);
+        } catch (error) {
+            console.warn("Could not load current field value, will work in offline mode:", error);
+            // Extension will still work for incrementing/decrementing, just won't sync with work item
+        }
+    }
+
+    private async initializeService(retries: number = 5): Promise<void> {
         for (let i = 0; i < retries; i++) {
             try {
-                this.workItemFormService = await SDK.getService("ms.vss-work-web.work-item-form-service") as IWorkItemFormService;
-                if (this.workItemFormService) {
-                    return;
+                console.log(`Attempting to get work item form service, attempt ${i + 1}/${retries}`);
+                
+                // Try different service identifiers
+                const serviceIds = [
+                    "ms.vss-work-web.work-item-form-service",
+                    "ms.vss-work-web.work-item-form",
+                    "workItemFormService"
+                ];
+
+                for (const serviceId of serviceIds) {
+                    try {
+                        console.log(`Trying service ID: ${serviceId}`);
+                        this.workItemFormService = await SDK.getService<IWorkItemFormService>(serviceId);
+                        
+                        if (this.workItemFormService) {
+                            console.log(`Work item form service initialized successfully with ID: ${serviceId}`);
+                            return;
+                        }
+                    } catch (serviceError) {
+                        console.warn(`Service ID ${serviceId} failed:`, serviceError);
+                    }
                 }
+
             } catch (error) {
                 console.warn(`Failed to get work item form service, attempt ${i + 1}/${retries}:`, error);
-                if (i < retries - 1) {
-                    await new Promise(resolve => setTimeout(resolve, 100)); // Wait 100ms before retry
-                }
+            }
+            
+            if (i < retries - 1) {
+                await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1s before retry
             }
         }
-        throw new Error("Failed to initialize work item form service after multiple attempts");
+        
+        // List available services for debugging
+        try {
+            console.log("Available SDK services:", Object.keys(SDK));
+            console.log("SDK configuration:", SDK.getConfiguration());
+        } catch (e) {
+            console.log("Could not list SDK services:", e);
+        }
+        
+        throw new Error("Failed to initialize work item form service after multiple attempts. The extension may not be running in a work item context.");
     }
 
     private async getFieldValue(): Promise<any> {
@@ -88,18 +135,24 @@ export class Controller {
 
     private async updateInternal(value: number): Promise<void> {
         try {
+            // Update the local model and view first
+            this.update(value);
+            
+            // Try to sync with work item if service is available
             if (!this.workItemFormService) {
+                console.log("Work item service not available, trying to initialize...");
                 await this.initializeService();
             }
             
             if (this.workItemFormService) {
                 await this.workItemFormService.setFieldValue(this.fieldName, value);
-                this.update(value);
+                console.log(`Updated field ${this.fieldName} to ${value}`);
             } else {
-                throw new Error("Work item form service not available");
+                console.warn("Work item form service not available, update only applied locally");
             }
         } catch (error) {
-            this.handleError(error);
+            console.warn("Failed to update work item field, keeping local change:", error);
+            // Keep the local update even if work item sync fails
         }
     }
 

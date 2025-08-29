@@ -6,36 +6,44 @@ class App {
     private controller: Controller | null = null;
 
     public async initialize(): Promise<void> {
-        // Initialize the SDK
-        await SDK.init();
+        try {
+            // Initialize the SDK and wait for it to be ready
+            await SDK.init();
 
-        // Register for work item events
-        await SDK.register(SDK.getContributionId(), {
-            onLoaded: (args: IWorkItemLoadedArgs) => {
-                this.onWorkItemLoaded(args);
-            },
-            onFieldChanged: (args: IWorkItemFieldChangedArgs) => {
-                this.onFieldChanged(args);
-            }
-        });
+            // Wait a bit more to ensure the host is fully ready
+            await SDK.ready();
 
-        // Handle save keyboard shortcut (Ctrl+S)
-        document.addEventListener('keydown', (event: KeyboardEvent) => {
-            if ((event.ctrlKey || event.metaKey) && event.key === 's') {
-                event.preventDefault();
-                this.saveWorkItem();
-            }
-        });
+            // Register for work item events
+            await SDK.register(SDK.getContributionId(), {
+                onLoaded: (args: IWorkItemLoadedArgs) => {
+                    this.onWorkItemLoaded(args);
+                },
+                onFieldChanged: (args: IWorkItemFieldChangedArgs) => {
+                    this.onFieldChanged(args);
+                }
+            });
 
-        // Notify the host that the extension has loaded
-        await SDK.notifyLoadSucceeded();
+            // Handle save keyboard shortcut (Ctrl+S)
+            document.addEventListener('keydown', (event: KeyboardEvent) => {
+                if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+                    event.preventDefault();
+                    this.saveWorkItem();
+                }
+            });
+
+            // Notify the host that the extension has loaded
+            await SDK.notifyLoadSucceeded();
+        } catch (error) {
+            console.error('Failed to initialize extension:', error);
+        }
     }
 
     private onWorkItemLoaded(args: IWorkItemLoadedArgs): void {
-        // Add a small delay to ensure work item is fully initialized
+        // Add a delay to ensure work item is fully initialized
         setTimeout(() => {
+            console.log("Work item loaded, initializing controller...");
             this.controller = new Controller();
-        }, 100);
+        }, 500);
     }
 
     private onFieldChanged(args: IWorkItemFieldChangedArgs): void {
