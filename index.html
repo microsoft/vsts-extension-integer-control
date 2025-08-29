@@ -11,6 +11,17 @@
 	<!-- Container for the control -->
 	<div id="control-container"></div>
 	
+	<!-- Load VSS SDK for compatibility -->
+	<script>
+		// Provide a VSS global for compatibility if needed
+		window.VSS = window.VSS || {
+			require: function(modules, callback) {
+				// Fallback for legacy VSS.require calls
+				callback();
+			}
+		};
+	</script>
+	
 	<!-- Our bundled application (includes Azure DevOps Extension SDK) -->
 	<script src="dist/app.js"></script>
 </body>

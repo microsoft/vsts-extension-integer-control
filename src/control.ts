@@ -95,32 +95,64 @@ export class Controller {
     }
 
     private async initializeService(): Promise<void> {
+        console.log("Attempting to get work item form service...");
+        
         try {
-            console.log("Attempting to get work item form service...");
             console.log("Current host:", SDK.getHost());
+        } catch (e) {
+            console.log("Could not get host info:", e);
+        }
+        
+        try {
             console.log("Extension context:", SDK.getExtensionContext());
-            
-            // Try the standard service identifier
-            this.workItemFormService = await SDK.getService("ms.vss-work-web.work-item-form-service");
-            
-            // Test that the service actually works
-            if (this.workItemFormService && typeof this.workItemFormService.getFieldValue === 'function') {
-                console.log("Work item form service initialized successfully");
-                console.log("Service methods:", Object.getOwnPropertyNames(this.workItemFormService));
+        } catch (e) {
+            console.log("Could not get extension context:", e);
+        }
+        
+        try {
+            console.log("SDK ready state check...");
+            await SDK.ready();
+            console.log("SDK is ready");
+        } catch (e) {
+            console.log("SDK ready check failed:", e);
+        }
+        
+        // Try different service identifiers
+        const serviceIdentifiers = [
+            "ms.vss-work-web.work-item-form-service",
+            "ms.vss-work-web.work-item-form",
+            "workItemFormService"
+        ];
+        
+        for (const serviceId of serviceIdentifiers) {
+            try {
+                console.log(`Trying service identifier: ${serviceId}`);
+                this.workItemFormService = await SDK.getService(serviceId);
                 
-                // Test the service with a quick call
-                try {
-                    const testValue = await this.workItemFormService.getFieldValue(this.fieldName);
-                    console.log("Service test successful, current value:", testValue);
-                } catch (testError) {
-                    console.warn("Service test failed:", testError);
+                console.log(`Service ${serviceId} returned:`, this.workItemFormService);
+                
+                if (this.workItemFormService) {
+                    console.log("Service object type:", typeof this.workItemFormService);
+                    console.log("Service properties:", Object.getOwnPropertyNames(this.workItemFormService));
+                    
+                    // Check if it has the methods we need
+                    if (typeof this.workItemFormService.getFieldValue === 'function') {
+                        console.log("Service has getFieldValue method - testing...");
+                        
+                        try {
+                            const testValue = await this.workItemFormService.getFieldValue(this.fieldName);
+                            console.log("Service test successful, current value:", testValue);
+                            return; // Success!
+                        } catch (testError) {
+                            console.warn("Service method test failed:", testError);
+                        }
+                    } else {
+                        console.log("Service missing getFieldValue method");
+                    }
                 }
-                return;
-            } else {
-                console.log("Service returned but missing expected methods:", this.workItemFormService);
+            } catch (serviceError) {
+                console.warn(`Service ${serviceId} failed:`, serviceError);
             }
-        } catch (error) {
-            console.warn("Standard service access failed:", error);
         }
         
         throw new Error("Work item form service not available");
