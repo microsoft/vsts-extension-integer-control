@@ -164,8 +164,35 @@ export class Controller {
             return;
         }
 
+        // Try to load current field value using the work item form service first
         try {
-            console.log(`Loading current value for field ${this.fieldName} from work item ${this.workItemId}`);
+            console.log("Attempting to load current field value via form service...");
+            const workItemFormService = await SDK.getService<any>("ms.vss-work-web.work-item-form");
+            
+            if (workItemFormService && typeof workItemFormService.getFieldValue === 'function') {
+                console.log("Using form service getFieldValue...");
+                const currentValue = await workItemFormService.getFieldValue(this.fieldName);
+                console.log(`Current field value from form service: ${this.fieldName} = ${currentValue} (type: ${typeof currentValue})`);
+                
+                if (currentValue !== undefined && currentValue !== null) {
+                    const numValue = Number(currentValue) || 0;
+                    this.model.setCurrentValue(numValue);
+                    this.view.update(numValue);
+                    console.log("Updated view with current field value from form service:", numValue);
+                    return; // Success!
+                } else {
+                    console.log("Field value from form service is null/undefined");
+                }
+            } else {
+                console.log("Form service doesn't have getFieldValue method");
+            }
+        } catch (formError) {
+            console.warn("Failed to load field value via form service:", formError);
+        }
+
+        // Fallback to REST API approach
+        try {
+            console.log(`Loading current value for field ${this.fieldName} from work item ${this.workItemId} via REST API`);
             
             const workItem = await this.witClient.getWorkItem(this.workItemId, undefined, undefined, undefined, WorkItemExpand.All);
             console.log("Work item data loaded successfully:", {
@@ -200,7 +227,7 @@ export class Controller {
                 console.warn("Work item loaded but has no fields property");
             }
         } catch (error) {
-            console.error("Failed to load current field value:", error);
+            console.error("Failed to load current field value via REST API:", error);
             console.error("Error details:", {
                 message: (error as any)?.message,
                 status: (error as any)?.status,
@@ -247,6 +274,20 @@ export class Controller {
                             console.log("Using setFieldValue from form service...");
                             await workItemFormService.setFieldValue(this.fieldName, value);
                             console.log("Field value set successfully via form service");
+                            
+                            // Check if the field value was actually set
+                            try {
+                                const verifyValue = await workItemFormService.getFieldValue(this.fieldName);
+                                console.log("Verified field value after set:", verifyValue);
+                                
+                                // Check if the work item is marked as dirty (indicating changes)
+                                const isDirty = await workItemFormService.isDirty();
+                                console.log("Work item is dirty after field change:", isDirty);
+                                
+                            } catch (verifyError) {
+                                console.warn("Could not verify field value:", verifyError);
+                            }
+                            
                             return; // Success!
                         } else if (typeof workItemFormService.setFieldValues === 'function') {
                             console.log("Using setFieldValues from form service...");
