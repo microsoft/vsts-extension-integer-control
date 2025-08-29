@@ -218,6 +218,51 @@ export class Controller {
             if (this.witClient && this.workItemId) {
                 console.log(`Updating work item ${this.workItemId} field ${this.fieldName} to ${value} via REST API`);
                 
+                // First, let's check if we can get authentication info
+                try {
+                    const accessToken = await SDK.getAccessToken();
+                    const user = SDK.getUser();
+                    console.log("Authentication context:", {
+                        hasToken: !!accessToken,
+                        tokenLength: accessToken?.length,
+                        userId: user?.id,
+                        userDisplayName: user?.displayName
+                    });
+                } catch (authError) {
+                    console.warn("Could not get authentication info:", authError);
+                }
+                
+                // Let's try using the work item form service instead of REST API
+                // This approach might work better within the extension context
+                try {
+                    console.log("Attempting to use work item form service for updates...");
+                    const workItemFormService = await SDK.getService<any>("ms.vss-work-web.work-item-form");
+                    
+                    if (workItemFormService) {
+                        console.log("Work item form service obtained:", typeof workItemFormService);
+                        console.log("Form service methods:", Object.getOwnPropertyNames(workItemFormService));
+                        
+                        // Try to set the field value using the form service
+                        if (typeof workItemFormService.setFieldValue === 'function') {
+                            console.log("Using setFieldValue from form service...");
+                            await workItemFormService.setFieldValue(this.fieldName, value);
+                            console.log("Field value set successfully via form service");
+                            return; // Success!
+                        } else if (typeof workItemFormService.setFieldValues === 'function') {
+                            console.log("Using setFieldValues from form service...");
+                            const fieldValues = { [this.fieldName]: value };
+                            await workItemFormService.setFieldValues(fieldValues);
+                            console.log("Field values set successfully via form service");
+                            return; // Success!
+                        } else {
+                            console.log("Form service doesn't have expected field update methods");
+                        }
+                    }
+                } catch (formServiceError) {
+                    console.warn("Form service approach failed:", formServiceError);
+                }
+                
+                // Fallback to REST API with enhanced debugging
                 const patchDocument = [{
                     op: "replace",
                     path: `/fields/${this.fieldName}`,
@@ -225,6 +270,20 @@ export class Controller {
                 }];
                 
                 console.log("Patch document:", patchDocument);
+                
+                // Try to get project context which might be needed for REST API
+                try {
+                    const projectService = await SDK.getService<any>("ms.vss-tfs-web.tfs-page-data-service");
+                    if (projectService) {
+                        const pageData = await projectService.getPageData();
+                        console.log("Project context:", {
+                            projectId: pageData?.project?.id,
+                            projectName: pageData?.project?.name
+                        });
+                    }
+                } catch (projectError) {
+                    console.log("Could not get project context:", projectError);
+                }
                 
                 // Add timeout wrapper to prevent hanging
                 const updateWithTimeout = Promise.race([
