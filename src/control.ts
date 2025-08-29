@@ -168,19 +168,44 @@ export class Controller {
             console.log(`Loading current value for field ${this.fieldName} from work item ${this.workItemId}`);
             
             const workItem = await this.witClient.getWorkItem(this.workItemId, undefined, undefined, undefined, WorkItemExpand.All);
-            console.log("Work item data:", workItem);
+            console.log("Work item data loaded successfully:", {
+                id: workItem?.id,
+                rev: workItem?.rev,
+                fieldsCount: workItem?.fields ? Object.keys(workItem.fields).length : 0
+            });
             
             if (workItem && workItem.fields) {
+                console.log("Available fields:", Object.keys(workItem.fields));
                 const currentValue = workItem.fields[this.fieldName];
-                console.log(`Current field value: ${this.fieldName} = ${currentValue}`);
+                console.log(`Current field value: ${this.fieldName} = ${currentValue} (type: ${typeof currentValue})`);
                 
-                const numValue = Number(currentValue) || 0;
-                this.model.setCurrentValue(numValue);
-                this.view.update(numValue);
-                console.log("Updated view with current field value:", numValue);
+                if (currentValue !== undefined && currentValue !== null) {
+                    const numValue = Number(currentValue) || 0;
+                    this.model.setCurrentValue(numValue);
+                    this.view.update(numValue);
+                    console.log("Updated view with current field value:", numValue);
+                } else {
+                    console.log(`Field ${this.fieldName} not found in work item or is null/undefined`);
+                    // Check if field exists with different casing or format
+                    const fieldKeys = Object.keys(workItem.fields);
+                    const possibleMatches = fieldKeys.filter(key => 
+                        key.toLowerCase().includes('effort') || 
+                        key.toLowerCase().includes('scheduling')
+                    );
+                    if (possibleMatches.length > 0) {
+                        console.log("Possible field name matches:", possibleMatches);
+                    }
+                }
+            } else {
+                console.warn("Work item loaded but has no fields property");
             }
         } catch (error) {
-            console.warn("Failed to load current field value:", error);
+            console.error("Failed to load current field value:", error);
+            console.error("Error details:", {
+                message: (error as any)?.message,
+                status: (error as any)?.status,
+                statusText: (error as any)?.statusText
+            });
         }
     }
 
@@ -199,15 +224,27 @@ export class Controller {
                     value: value
                 }];
                 
+                console.log("Patch document:", patchDocument);
+                
                 try {
                     const result = await this.witClient.updateWorkItem(patchDocument, this.workItemId);
-                    console.log("Work item updated successfully:", result?.rev);
+                    console.log("Work item updated successfully:", {
+                        id: result?.id,
+                        rev: result?.rev,
+                        updatedField: result?.fields?.[this.fieldName]
+                    });
                 } catch (apiError) {
                     console.error("REST API update failed:", apiError);
+                    console.error("API Error details:", {
+                        message: (apiError as any)?.message,
+                        status: (apiError as any)?.status,
+                        statusText: (apiError as any)?.statusText,
+                        response: (apiError as any)?.response
+                    });
                     throw apiError;
                 }
             } else {
-                console.log(`Local update only: ${this.fieldName} = ${value} (no REST client or work item ID)`);
+                console.log(`Local update only: ${this.fieldName} = ${value} (witClient: ${!!this.witClient}, workItemId: ${this.workItemId})`);
             }
             
         } catch (error) {
