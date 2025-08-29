@@ -3,28 +3,16 @@
 
 <head>
 	<meta charset="utf-8" />
-	<!-- VSS Framework -->
-	<script src="scripts/VSS.SDK.min.js"></script>
+	<!-- Azure DevOps Extension SDK -->
+	<script src="https://dev.azure.com/mseng/_apis/public/gallery/client/getContent/latest/azure-devops-extension-sdk/SDK.js"></script>
 
-	<title>Hit Count Control</title>
+	<title>Plus/Minus Integer Control</title>
 	<link rel="stylesheet" href="styles/style.css" type="text/css" />
 </head>
 
 <body style="height:100%">
-	<script>
-        VSS.init({
-            explicitNotifyLoaded: true,
-            usePlatformScripts: true,
-            usePlatformStyles: true, 
-            configureModuleLoader: true
-        });
-
-        // Load main entry point for extension 
-        VSS.require(["scripts/app"], function () {
-            // loading succeeded
-            VSS.notifyLoadSucceeded();
-        });
-    </script>
+	<!-- Our bundled application -->
+	<script src="dist/app.js"></script>
 </body>
 
 </html>
