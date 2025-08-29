@@ -28,6 +28,9 @@ export class View {
             document.body.appendChild(this.container);
         }
         
+        // Add a unique class to scope our CSS and prevent leakage
+        this.container.classList.add('hitcount-extension-root');
+        
         // Use the original container styling - much more minimal but with flexbox
         this.container.style.display = 'flex';
         this.container.style.alignItems = 'center';

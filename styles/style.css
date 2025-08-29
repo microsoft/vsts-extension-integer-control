@@ -1,4 +1,5 @@
-.container {
+/* Scoped styles for hitcount extension - prevent CSS leakage */
+.hitcount-extension-root.container {
     display: flex !important;
     align-items: center !important;
     padding-left: 1px;
@@ -8,29 +9,52 @@
     margin-bottom: 0;
 }
 
-.wrap {
+.hitcount-extension-root .wrap {
     flex-grow: 1;
     overflow: hidden !important;
 }
 
-.container > .bowtie-icon {
+.hitcount-extension-root.container > .bowtie-icon {
     font-size: 16px;
-    color: #666;
+    color: #333;
     margin: 0px 2px;
     cursor: pointer;
-    padding: 6px;
+    padding: 6px 8px;
     user-select: none;
     vertical-align: middle;
     display: inline-block;
     flex-shrink: 0;
     line-height: 1;
+    
+    /* Make them look like proper buttons */
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-width: 24px;
+    text-align: center;
+    font-weight: bold;
+    font-family: monospace;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.bowtie-icon.focus, .bowtie-icon:hover {
-    color: gray;
+.hitcount-extension-root .bowtie-icon.focus, 
+.hitcount-extension-root .bowtie-icon:hover {
+    background-color: #e6e6e6;
+    border-color: #999;
+    color: #000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
 }
 
-.combo {
+.hitcount-extension-root .bowtie-icon:active {
+    background-color: #d4d4d4;
+    border-color: #666;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+    transform: translateY(0);
+}
+
+.hitcount-extension-root .combo {
     border: 1px solid transparent;
     height: 2em;
     position: relative;
@@ -41,11 +65,13 @@
     margin-bottom: 0;
 }
 
-.combo:focus, .combo:hover, .combo.border {
+.hitcount-extension-root .combo:focus, 
+.hitcount-extension-root .combo:hover, 
+.hitcount-extension-root .combo.border {
     border: 1px solid #e6e6e6;
 }
 
-div.wrap>input[type=number] {
+.hitcount-extension-root div.wrap>input[type=number] {
     height: 100%;
     font-size: 14px;
     text-overflow: ellipsis;
@@ -53,7 +79,7 @@ div.wrap>input[type=number] {
     outline: none;
 }
 
-input {
+.hitcount-extension-root input {
     width: 100%;
     font-size: 14px;
     text-overflow: ellipsis;
@@ -67,41 +93,65 @@ input {
 }
 
 /*
- * Remove up/down arrows on input type=number
+ * Remove up/down arrows on input type=number - scoped
  */
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
+.hitcount-extension-root input[type="number"]::-webkit-outer-spin-button,
+.hitcount-extension-root input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-input[type="number"] {
+
+.hitcount-extension-root input[type="number"] {
     -moz-appearance: textfield;
     appearance: textfield;
 }
 
-/* Hide all scrollbars in the extension */
-.container, .wrap, input {
+/* Hide scrollbars only within our extension - scoped */
+.hitcount-extension-root,
+.hitcount-extension-root .wrap, 
+.hitcount-extension-root input {
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
 
-.container::-webkit-scrollbar,
-.wrap::-webkit-scrollbar,
-input::-webkit-scrollbar {
+.hitcount-extension-root::-webkit-scrollbar,
+.hitcount-extension-root .wrap::-webkit-scrollbar,
+.hitcount-extension-root input::-webkit-scrollbar {
     display: none; /* Safari and Chrome */
     width: 0 !important;
     height: 0 !important;
 }
 
-/* Force no overflow on all extension elements */
-.container * {
+/* Force no overflow only on our extension elements - scoped */
+.hitcount-extension-root * {
     overflow: hidden !important;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
 }
 
-.container *::-webkit-scrollbar {
+.hitcount-extension-root *::-webkit-scrollbar {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
+}
+
+/* Fix Azure DevOps form controls that might be affected by CSS leakage */
+.bolt-textfield-input,
+.bolt-textfield-input input,
+.bolt-textfield-input textarea {
+    overflow-y: visible !important;
+    overflow-x: visible !important;
+    overflow: visible !important;
+}
+
+.bolt-textfield-input textarea {
+    resize: none !important;
+    height: auto !important;
+    line-height: 1.4;
+}
+
+/* Ensure ADO inputs don't inherit our overflow hidden */
+input:not(.hitcount-extension-root input),
+textarea:not(.hitcount-extension-root textarea) {
+    overflow: visible !important;
 }
