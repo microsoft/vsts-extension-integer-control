@@ -28,18 +28,15 @@ export class View {
             document.body.appendChild(this.container);
         }
         
-        // Style the container for better layout
-        this.container.style.display = 'flex';
-        this.container.style.alignItems = 'center';
-        this.container.style.gap = '8px';
-        this.container.style.padding = '8px';
+        // Minimal container styling to preserve Azure DevOps look
+        this.container.style.paddingTop = '8px';
+        this.container.style.paddingBottom = '8px';
 
         // Create input wrapper
         const wrap = document.createElement('div');
         wrap.className = 'wrap combo emptyBorder';
-        wrap.style.display = 'inline-block';
-        wrap.style.marginRight = '8px';
-        wrap.style.verticalAlign = 'top';
+        wrap.style.marginTop = '8px';
+        wrap.style.marginBottom = '8px';
 
         // Create number input
         const input = document.createElement('input');
@@ -48,23 +45,13 @@ export class View {
         input.value = this.currentValue;
         input.setAttribute('aria-valuenow', this.currentValue);
         
-        // Style the input to be bigger and remove scrolling
-        input.style.fontSize = '16px';
-        input.style.height = '40px';
-        input.style.width = '100px';
-        input.style.padding = '8px 12px';
-        input.style.textAlign = 'center';
-        input.style.border = '1px solid #ccc';
-        input.style.borderRadius = '4px';
-        input.style.outline = 'none';
-        input.style.boxSizing = 'border-box';
+        // Minimal styling - let Azure DevOps styles take precedence
+        input.style.marginTop = '8px';
+        input.style.marginBottom = '8px';
         
         // Disable mouse wheel scrolling on the input
         input.addEventListener('wheel', (evt) => {
             evt.preventDefault();
-            // Optionally, you could still allow increment/decrement with wheel
-            // if (evt.deltaY < 0 && this.onUpTick) this.onUpTick();
-            // else if (evt.deltaY > 0 && this.onDownTick) this.onDownTick();
         });
         
         // Prevent arrow keys from changing the value when not focused
