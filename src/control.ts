@@ -226,8 +226,17 @@ export class Controller {
                 
                 console.log("Patch document:", patchDocument);
                 
+                // Add timeout wrapper to prevent hanging
+                const updateWithTimeout = Promise.race([
+                    this.witClient.updateWorkItem(patchDocument, this.workItemId),
+                    new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('REST API call timed out after 10 seconds')), 10000)
+                    )
+                ]);
+                
                 try {
-                    const result = await this.witClient.updateWorkItem(patchDocument, this.workItemId);
+                    console.log("About to call updateWorkItem REST API with timeout...");
+                    const result = await updateWithTimeout as any;
                     console.log("Work item updated successfully:", {
                         id: result?.id,
                         rev: result?.rev,
@@ -241,6 +250,14 @@ export class Controller {
                         statusText: (apiError as any)?.statusText,
                         response: (apiError as any)?.response
                     });
+                    
+                    // Check if it's a permission or authentication issue
+                    if ((apiError as any)?.status === 401) {
+                        console.error("Authentication error - check if extension has proper permissions");
+                    } else if ((apiError as any)?.status === 403) {
+                        console.error("Permission error - extension may not have permission to edit work items");
+                    }
+                    
                     throw apiError;
                 }
             } else {
