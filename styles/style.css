@@ -1,10 +1,12 @@
 .container {
     display: flex;
     padding-left: 1px;
+    overflow: hidden !important;
 }
 
 .wrap {
     flex-grow: 1;
+    overflow: hidden !important;
 }
 
 .container > .bowtie-icon {
@@ -56,4 +58,32 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 input[type="number"] {
     -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+/* Hide all scrollbars in the extension */
+.container, .wrap, input {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.container::-webkit-scrollbar,
+.wrap::-webkit-scrollbar,
+input::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* Force no overflow on all extension elements */
+.container * {
+    overflow: hidden !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+.container *::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
 }

@@ -30,6 +30,11 @@ export class View {
         
         // Use the original container styling - much more minimal
         this.container.style.paddingLeft = '1px';
+        this.container.style.overflow = 'hidden';
+        this.container.style.overflowX = 'hidden';
+        this.container.style.overflowY = 'hidden';
+        this.container.style.maxWidth = '100%';
+        this.container.style.boxSizing = 'border-box';
         
         // Prevent scrolling on the entire container as well
         this.container.addEventListener('wheel', (evt) => {
