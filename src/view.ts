@@ -33,6 +33,19 @@ export class View {
         this.container.style.alignItems = 'center';
         this.container.style.gap = '8px';
         this.container.style.padding = '8px';
+        
+        // Prevent scrolling on the entire container as well
+        this.container.addEventListener('wheel', (evt) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            return false;
+        }, { passive: false });
+        
+        this.container.addEventListener('mousewheel', ((evt) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            return false;
+        }) as EventListener, { passive: false });
 
         // Create input wrapper
         const wrap = document.createElement('div');
@@ -40,6 +53,19 @@ export class View {
         wrap.style.display = 'inline-block';
         wrap.style.marginRight = '8px';
         wrap.style.verticalAlign = 'top';
+        
+        // Prevent scrolling on the wrapper as well
+        wrap.addEventListener('wheel', (evt) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            return false;
+        }, { passive: false });
+        
+        wrap.addEventListener('mousewheel', ((evt) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            return false;
+        }) as EventListener, { passive: false });
 
         // Create number input
         const input = document.createElement('input');
@@ -52,32 +78,39 @@ export class View {
         input.style.marginTop = '8px';
         input.style.marginBottom = '8px';
         
+        // More aggressive approach to disable scrolling
+        const preventScroll = (evt: Event) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            evt.stopImmediatePropagation();
+            return false;
+        };
+        
         // Disable mouse wheel scrolling on the input - multiple approaches
-        input.addEventListener('wheel', (evt) => {
-            evt.preventDefault();
-            evt.stopPropagation();
-            return false;
-        }, { passive: false });
+        input.addEventListener('wheel', preventScroll, { passive: false });
+        input.addEventListener('mousewheel', preventScroll as EventListener, { passive: false });
+        input.addEventListener('DOMMouseScroll', preventScroll as EventListener, { passive: false }); // Firefox
         
-        // Also disable on mousewheel (older browsers)
-        input.addEventListener('mousewheel', (evt) => {
-            evt.preventDefault();
-            evt.stopPropagation();
-            return false;
-        }, { passive: false });
-        
-        // Disable scrolling when input is focused
-        input.addEventListener('focus', () => {
-            input.addEventListener('wheel', (evt) => {
-                evt.preventDefault();
-                evt.stopPropagation();
-            }, { passive: false });
+        // Disable scrolling when input is focused or hovered
+        input.addEventListener('mouseenter', () => {
+            input.addEventListener('wheel', preventScroll, { passive: false });
+            input.addEventListener('mousewheel', preventScroll as EventListener, { passive: false });
         });
         
-        // Handle keydown for arrow keys
+        input.addEventListener('focus', () => {
+            // Remove any default wheel behavior
+            input.addEventListener('wheel', preventScroll, { passive: false });
+            input.addEventListener('mousewheel', preventScroll as EventListener, { passive: false });
+        });
+        
+        // Handle keydown for arrow keys - but don't prevent them, just control them
         input.addEventListener('keydown', (evt) => {
-            if (evt.key === 'ArrowUp' || evt.key === 'ArrowDown') {
-                this.handleKeyDown(evt);
+            if (evt.key === 'ArrowUp') {
+                evt.preventDefault(); // Prevent native increment
+                this.handleKeyDown(evt); // Use our custom handler
+            } else if (evt.key === 'ArrowDown') {
+                evt.preventDefault(); // Prevent native decrement
+                this.handleKeyDown(evt); // Use our custom handler
             }
         });
 
