@@ -21,9 +21,5 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     clean: true
   },
-  externals: {
-    'azure-devops-extension-sdk': 'SDK',
-    'azure-devops-extension-api': 'API'
-  },
   mode: process.env.NODE_ENV || 'development'
 };

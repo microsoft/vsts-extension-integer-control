@@ -14,15 +14,18 @@ export class View {
     }
 
     private init(): void {
-        // Remove any existing container
-        const existingContainer = document.querySelector('.container');
+        // Use the existing control-container from HTML
+        const existingContainer = document.getElementById('control-container');
         if (existingContainer) {
-            existingContainer.remove();
+            this.container = existingContainer;
+            // Clear any existing content
+            this.container.innerHTML = '';
+        } else {
+            // Fallback: create container if it doesn't exist
+            this.container = document.createElement('div');
+            this.container.className = 'container';
+            document.body.appendChild(this.container);
         }
-
-        // Create main container
-        this.container = document.createElement('div');
-        this.container.className = 'container';
 
         // Create input wrapper
         const wrap = document.createElement('div');
@@ -80,9 +83,6 @@ export class View {
         this.container.appendChild(wrap);
         this.container.appendChild(downtick);
         this.container.appendChild(uptick);
-
-        // Add to document
-        document.body.appendChild(this.container);
     }
 
     private handleKeyDown(evt: KeyboardEvent): void {
