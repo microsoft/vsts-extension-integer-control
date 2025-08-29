@@ -34,8 +34,10 @@ export class ViewAdoNative {
         this.container.style.alignItems = 'center';
         this.container.style.gap = '8px';
         this.container.style.overflow = 'visible';
-        this.container.style.maxWidth = '100%';
-        this.container.style.maxHeight = '100%';
+        this.container.style.width = 'auto';
+        this.container.style.minWidth = '200px';
+        this.container.style.height = 'auto';
+        this.container.style.minHeight = '32px';
         this.container.style.boxSizing = 'border-box';
         this.container.style.scrollbarWidth = 'none';
         (this.container.style as any).msOverflowStyle = 'none';

@@ -4,21 +4,25 @@
     align-items: center !important;
     gap: 8px !important;
     overflow: visible !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
+    width: auto !important;
+    min-width: 200px !important;
+    height: auto !important;
+    min-height: 32px !important;
 }
 
 .bolt-textfield {
     flex: 1 !important;
-    overflow: hidden !important;
-    max-width: 100% !important;
+    overflow: visible !important;
+    min-width: 120px !important;
+    width: auto !important;
 }
 
 .bolt-textfield-input {
-    overflow: hidden !important;
+    overflow: visible !important;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
-    max-width: 100% !important;
+    width: auto !important;
+    min-width: 120px !important;
     box-sizing: border-box !important;
 }
 
@@ -66,7 +70,8 @@
     overflow: visible !important;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
-    max-width: 100% !important;
+    width: auto !important;
+    min-width: 200px !important;
     box-sizing: border-box !important;
     display: flex !important;
     align-items: center !important;
@@ -79,7 +84,6 @@
 .bolt-textfield-container * {
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
-    max-width: 100% !important;
     box-sizing: border-box !important;
 }
 
