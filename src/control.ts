@@ -73,14 +73,39 @@ export class Controller {
                 const workItemService = await SDK.getService<any>("ms.vss-work-web.work-item-service");
                 console.log("Work item service obtained:", workItemService);
                 
-                if (workItemService && typeof workItemService.getId === 'function') {
-                    this.workItemId = await workItemService.getId();
-                    console.log("Work item ID from service:", this.workItemId);
+                // Try different methods to get the work item ID
+                if (workItemService) {
+                    // Try getId method
+                    if (typeof workItemService.getId === 'function') {
+                        this.workItemId = await workItemService.getId();
+                        console.log("Work item ID from getId():", this.workItemId);
+                    }
+                    // Try getWorkItemId method
+                    else if (typeof workItemService.getWorkItemId === 'function') {
+                        this.workItemId = await workItemService.getWorkItemId();
+                        console.log("Work item ID from getWorkItemId():", this.workItemId);
+                    }
+                    // Try accessing workItemsMap
+                    else if (workItemService.workItemsMap && workItemService.workItemsMap.size > 0) {
+                        const workItemKeys = Array.from(workItemService.workItemsMap.keys());
+                        this.workItemId = Number(workItemKeys[0]);
+                        console.log("Work item ID from workItemsMap:", this.workItemId);
+                    }
+                    // Try pageContext
+                    else if (workItemService.pageContext && workItemService.pageContext.workItemId) {
+                        this.workItemId = workItemService.pageContext.workItemId;
+                        console.log("Work item ID from pageContext:", this.workItemId);
+                    }
+                    else {
+                        console.log("Available methods on work item service:", Object.getOwnPropertyNames(workItemService));
+                        console.log("Available properties on work item service:", Object.keys(workItemService));
+                    }
                     
-                    // Try to load the current field value
-                    await this.loadCurrentFieldValue();
+                    if (this.workItemId) {
+                        await this.loadCurrentFieldValue();
+                    }
                 } else {
-                    console.log("Work item service doesn't have getId method");
+                    console.log("Work item service is null");
                 }
             } catch (serviceError) {
                 console.warn("Could not get work item service:", serviceError);
@@ -97,6 +122,17 @@ export class Controller {
                     
                     // Try to load the current field value
                     await this.loadCurrentFieldValue();
+                } else {
+                    // Try another URL pattern (for different Azure DevOps contexts)
+                    const workItemMatch2 = url.match(/\/(\d+)(?:\?|$)/);
+                    if (workItemMatch2) {
+                        this.workItemId = parseInt(workItemMatch2[1], 10);
+                        console.log("Work item ID from URL (pattern 2):", this.workItemId);
+                        await this.loadCurrentFieldValue();
+                    } else {
+                        console.log("Could not extract work item ID from URL");
+                        console.log("Extension will work in local-only mode");
+                    }
                 }
             }
             
