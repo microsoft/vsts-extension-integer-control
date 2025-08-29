@@ -1,6 +1,6 @@
 import * as SDK from "azure-devops-extension-sdk";
 import { getClient } from "azure-devops-extension-api";
-import { WorkItemTrackingRestClient } from "azure-devops-extension-api/WorkItemTracking";
+import { WorkItemTrackingRestClient, WorkItemExpand } from "azure-devops-extension-api/WorkItemTracking";
 import { Model } from "./model";
 import { View } from "./view";
 import { ErrorView } from "./errorView";
@@ -68,22 +68,66 @@ export class Controller {
             this.witClient = getClient(WorkItemTrackingRestClient);
             console.log("REST client initialized successfully");
 
-            // Get the current work item context
-            const workItemContext = SDK.getConfiguration();
-            console.log("Work item context:", workItemContext);
-            
-            // Try to get the work item ID from the context
-            // This might be available in the host or through other means
-            const host = SDK.getHost();
-            console.log("Host information:", host);
-            
-            // For now, let's see what we can extract from the context
-            console.log("Extension context:", SDK.getExtensionContext());
-            
-            // TODO: Extract work item ID from the context to enable REST API calls
+            // Try to get the work item service to access work item context
+            try {
+                const workItemService = await SDK.getService<any>("ms.vss-work-web.work-item-service");
+                console.log("Work item service obtained:", workItemService);
+                
+                if (workItemService && typeof workItemService.getId === 'function') {
+                    this.workItemId = await workItemService.getId();
+                    console.log("Work item ID from service:", this.workItemId);
+                    
+                    // Try to load the current field value
+                    await this.loadCurrentFieldValue();
+                } else {
+                    console.log("Work item service doesn't have getId method");
+                }
+            } catch (serviceError) {
+                console.warn("Could not get work item service:", serviceError);
+                
+                // Alternative: try to get work item ID from URL or other context
+                const url = window.location.href;
+                console.log("Current URL:", url);
+                
+                // Extract work item ID from URL (typical format: .../workitems/edit/123)
+                const workItemMatch = url.match(/workitems\/edit\/(\d+)/);
+                if (workItemMatch) {
+                    this.workItemId = parseInt(workItemMatch[1], 10);
+                    console.log("Work item ID from URL:", this.workItemId);
+                    
+                    // Try to load the current field value
+                    await this.loadCurrentFieldValue();
+                }
+            }
             
         } catch (error) {
             console.warn("Could not initialize REST client:", error);
+        }
+    }
+
+    private async loadCurrentFieldValue(): Promise<void> {
+        if (!this.witClient || !this.workItemId) {
+            console.log("Cannot load field value - missing client or work item ID");
+            return;
+        }
+
+        try {
+            console.log(`Loading current value for field ${this.fieldName} from work item ${this.workItemId}`);
+            
+            const workItem = await this.witClient.getWorkItem(this.workItemId, undefined, undefined, undefined, WorkItemExpand.All);
+            console.log("Work item data:", workItem);
+            
+            if (workItem && workItem.fields) {
+                const currentValue = workItem.fields[this.fieldName];
+                console.log(`Current field value: ${this.fieldName} = ${currentValue}`);
+                
+                const numValue = Number(currentValue) || 0;
+                this.model.setCurrentValue(numValue);
+                this.view.update(numValue);
+                console.log("Updated view with current field value:", numValue);
+            }
+        } catch (error) {
+            console.warn("Failed to load current field value:", error);
         }
     }
 
@@ -92,16 +136,25 @@ export class Controller {
             // Update the local model and view first
             this.update(value);
             
-            // TODO: Implement REST API call to update work item field
+            // Try to update the work item field via REST API
             if (this.witClient && this.workItemId) {
-                console.log(`Would update work item ${this.workItemId} field ${this.fieldName} to ${value} via REST API`);
-                // await this.witClient.updateWorkItem([{
-                //     op: "replace",
-                //     path: `/fields/${this.fieldName}`,
-                //     value: value
-                // }], this.workItemId);
+                console.log(`Updating work item ${this.workItemId} field ${this.fieldName} to ${value} via REST API`);
+                
+                const patchDocument = [{
+                    op: "replace",
+                    path: `/fields/${this.fieldName}`,
+                    value: value
+                }];
+                
+                try {
+                    const result = await this.witClient.updateWorkItem(patchDocument, this.workItemId);
+                    console.log("Work item updated successfully:", result?.rev);
+                } catch (apiError) {
+                    console.error("REST API update failed:", apiError);
+                    throw apiError;
+                }
             } else {
-                console.log(`Local update only: ${this.fieldName} = ${value}`);
+                console.log(`Local update only: ${this.fieldName} = ${value} (no REST client or work item ID)`);
             }
             
         } catch (error) {
