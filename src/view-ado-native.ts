@@ -32,13 +32,13 @@ export class ViewAdoNative {
         this.container.className = 'bolt-textfield-container';
         this.container.style.display = 'flex';
         this.container.style.alignItems = 'center';
-        this.container.style.gap = '4px';
+        this.container.style.gap = '6px';
         this.container.style.overflow = 'visible';
         this.container.style.width = '100%';
-        this.container.style.minWidth = '240px';
+        this.container.style.minWidth = '260px';
         this.container.style.maxWidth = 'none';
         this.container.style.height = 'auto';
-        this.container.style.minHeight = '28px';
+        this.container.style.minHeight = '26px';
         this.container.style.padding = '2px 4px';
         this.container.style.boxSizing = 'border-box';
         this.container.style.scrollbarWidth = 'none';
@@ -155,7 +155,7 @@ export class ViewAdoNative {
                 (parent.style as any).msOverflowStyle = 'none';
                 parent.style.width = '100%';
                 parent.style.maxWidth = 'none';
-                parent.style.minWidth = '240px';
+                parent.style.minWidth = '260px';
                 parent.style.boxSizing = 'border-box';
             }
             

@@ -1,32 +1,32 @@
-/* ADO Native Component Styling - Minimal overrides */
+/* ADO Native Component Styling - Compact layout to prevent scrolling */
 .bolt-textfield-container {
     display: flex !important;
     align-items: center !important;
-    gap: 4px !important;
+    gap: 6px !important;
     overflow: visible !important;
     width: 100% !important;
-    min-width: 240px !important;
+    min-width: 260px !important;
     height: auto !important;
-    min-height: 28px !important;
+    min-height: 26px !important;
     padding: 2px 4px !important;
 }
 
 .bolt-textfield {
     flex: 1 !important;
+    flex-shrink: 1 !important;
     overflow: visible !important;
-    min-width: 100px !important;
-    max-width: 150px !important;
+    min-width: 120px !important;
+    max-width: 160px !important;
     width: auto !important;
-    height: 24px !important;
+    height: 22px !important;
 }
 
 .bolt-textfield-input {
     overflow: visible !important;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
-    width: auto !important;
-    min-width: 80px !important;
-    height: 22px !important;
+    width: 100% !important;
+    height: 20px !important;
     box-sizing: border-box !important;
     font-size: 12px !important;
     padding: 2px 4px !important;
@@ -43,16 +43,16 @@
     gap: 2px !important;
     overflow: visible !important;
     flex-shrink: 0 !important;
-    min-width: 52px !important;
-    max-width: 52px !important;
+    min-width: 50px !important;
+    max-width: 50px !important;
 }
 
 .bolt-button.bolt-button-subtle {
-    min-width: 24px !important;
-    max-width: 24px !important;
-    width: 24px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+    width: 22px !important;
     height: 22px !important;
-    padding: 1px 2px !important;
+    padding: 2px 4px !important;
     font-family: monospace !important;
     font-weight: bold !important;
     font-size: 12px !important;
@@ -65,6 +65,9 @@
     cursor: pointer !important;
     transition: all 0.2s ease !important;
     border-radius: 2px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 .bolt-button.bolt-button-subtle:hover {
@@ -75,19 +78,19 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
 }
 
-/* Aggressively hide ALL scrollbars in the extension container and parents */
+/* Hide scrollbars while allowing content to be visible */
 #control-container {
     overflow: visible !important;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
     width: 100% !important;
     max-width: none !important;
-    min-width: 240px !important;
-    min-height: 28px !important;
+    min-width: 260px !important;
+    min-height: 26px !important;
     box-sizing: border-box !important;
     display: flex !important;
     align-items: center !important;
-    gap: 4px !important;
+    gap: 6px !important;
     padding: 2px 4px !important;
     flex-wrap: nowrap !important;
 }
@@ -110,7 +113,7 @@
     background: transparent !important;
 }
 
-/* Target the parent containers that might be causing scrollbars */
+/* Target parent containers */
 .work-item-form-control-container,
 .work-item-form-control,
 .control-container {
@@ -119,7 +122,7 @@
     -ms-overflow-style: none !important;
     width: 100% !important;
     max-width: none !important;
-    min-width: 240px !important;
+    min-width: 260px !important;
 }
 
 .work-item-form-control-container::-webkit-scrollbar,
@@ -130,7 +133,7 @@
     height: 0 !important;
 }
 
-/* Ensure no element can create scrollbars */
+/* Global scrollbar prevention */
 * {
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
