@@ -1,24 +1,24 @@
-/* ADO Native Component Styling - Compact layout to prevent scrolling */
+/* ADO Native Component Styling - Ultra compact layout to prevent scrolling */
 .bolt-textfield-container {
     display: flex !important;
     align-items: center !important;
-    gap: 6px !important;
+    gap: 4px !important;
     overflow: visible !important;
     width: 100% !important;
-    min-width: 260px !important;
+    min-width: 200px !important;
     height: auto !important;
-    min-height: 26px !important;
-    padding: 2px 4px !important;
+    min-height: 24px !important;
+    padding: 2px !important;
 }
 
 .bolt-textfield {
     flex: 1 !important;
     flex-shrink: 1 !important;
     overflow: visible !important;
-    min-width: 120px !important;
-    max-width: 160px !important;
+    min-width: 80px !important;
+    max-width: 120px !important;
     width: auto !important;
-    height: 22px !important;
+    height: 20px !important;
 }
 
 .bolt-textfield-input {
@@ -26,10 +26,10 @@
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
     width: 100% !important;
-    height: 20px !important;
+    height: 18px !important;
     box-sizing: border-box !important;
-    font-size: 12px !important;
-    padding: 2px 4px !important;
+    font-size: 11px !important;
+    padding: 1px 3px !important;
 }
 
 .bolt-textfield-input::-webkit-scrollbar {
@@ -40,22 +40,22 @@
 
 .bolt-button-group {
     display: flex !important;
-    gap: 2px !important;
+    gap: 1px !important;
     overflow: visible !important;
     flex-shrink: 0 !important;
-    min-width: 50px !important;
-    max-width: 50px !important;
+    min-width: 38px !important;
+    max-width: 38px !important;
 }
 
 .bolt-button.bolt-button-subtle {
-    min-width: 22px !important;
-    max-width: 22px !important;
-    width: 22px !important;
-    height: 22px !important;
-    padding: 2px 4px !important;
+    min-width: 18px !important;
+    max-width: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+    padding: 1px !important;
     font-family: monospace !important;
     font-weight: bold !important;
-    font-size: 12px !important;
+    font-size: 10px !important;
     line-height: 1 !important;
     overflow: visible !important;
     flex-shrink: 0 !important;
@@ -85,13 +85,13 @@
     -ms-overflow-style: none !important;
     width: 100% !important;
     max-width: none !important;
-    min-width: 260px !important;
-    min-height: 26px !important;
+    min-width: 200px !important;
+    min-height: 24px !important;
     box-sizing: border-box !important;
     display: flex !important;
     align-items: center !important;
-    gap: 6px !important;
-    padding: 2px 4px !important;
+    gap: 4px !important;
+    padding: 2px !important;
     flex-wrap: nowrap !important;
 }
 
@@ -122,7 +122,7 @@
     -ms-overflow-style: none !important;
     width: 100% !important;
     max-width: none !important;
-    min-width: 260px !important;
+    min-width: 200px !important;
 }
 
 .work-item-form-control-container::-webkit-scrollbar,
