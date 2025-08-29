@@ -284,6 +284,22 @@ export class Controller {
                                 const isDirty = await workItemFormService.isDirty();
                                 console.log("Work item is dirty after field change:", isDirty);
                                 
+                                // Auto-save the work item
+                                if (isDirty && typeof workItemFormService.save === 'function') {
+                                    console.log("Auto-saving work item...");
+                                    try {
+                                        await workItemFormService.save();
+                                        console.log("Work item saved successfully!");
+                                    } catch (saveError) {
+                                        console.warn("Failed to auto-save work item:", saveError);
+                                        // Don't throw the error - the field change was successful even if save failed
+                                    }
+                                } else if (!isDirty) {
+                                    console.log("Work item not dirty, no save needed");
+                                } else {
+                                    console.log("Save method not available on form service");
+                                }
+                                
                             } catch (verifyError) {
                                 console.warn("Could not verify field value:", verifyError);
                             }
@@ -294,6 +310,19 @@ export class Controller {
                             const fieldValues = { [this.fieldName]: value };
                             await workItemFormService.setFieldValues(fieldValues);
                             console.log("Field values set successfully via form service");
+                            
+                            // Auto-save the work item
+                            try {
+                                const isDirty = await workItemFormService.isDirty();
+                                if (isDirty && typeof workItemFormService.save === 'function') {
+                                    console.log("Auto-saving work item...");
+                                    await workItemFormService.save();
+                                    console.log("Work item saved successfully!");
+                                }
+                            } catch (saveError) {
+                                console.warn("Failed to auto-save work item:", saveError);
+                            }
+                            
                             return; // Success!
                         } else {
                             console.log("Form service doesn't have expected field update methods");
