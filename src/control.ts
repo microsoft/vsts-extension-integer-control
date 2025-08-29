@@ -41,6 +41,19 @@ export class Controller {
             );
 
             await this.initializeRestClient();
+            
+            // Add visibility change listener to save when switching tabs
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    // Page is being hidden (user switching tabs), force save current value
+                    this.saveCurrentValue();
+                }
+            });
+
+            // Add beforeunload listener to save when navigating away
+            window.addEventListener('beforeunload', () => {
+                this.saveCurrentValue();
+            });
 
         } catch (error) {
             this.handleError(error);
@@ -262,6 +275,14 @@ export class Controller {
 
     public getFieldName(): string {
         return this.fieldName;
+    }
+
+    private async saveCurrentValue(): Promise<void> {
+        if (this.model) {
+            const currentValue = this.model.getCurrentValue();
+            console.log(`Saving current value on tab switch: ${currentValue}`);
+            await this.updateInternal(currentValue);
+        }
     }
 
     private handleError(error: any): void {

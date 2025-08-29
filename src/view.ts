@@ -3,6 +3,7 @@ import { Model } from "./model";
 export class View {
     private currentValue: string = "";
     private container!: HTMLElement;
+    private saveTimeout: number | null = null;
 
     constructor(
         private model: Model,
@@ -40,6 +41,8 @@ export class View {
 
         // Add event listeners
         input.addEventListener('change', () => this.inputChanged());
+        input.addEventListener('input', () => this.inputChangedWithDebounce());
+        input.addEventListener('blur', () => this.inputChanged());
         input.addEventListener('keydown', (evt) => this.handleKeyDown(evt));
 
         wrap.appendChild(input);
@@ -47,7 +50,9 @@ export class View {
         // Create increment button
         const uptick = document.createElement('div');
         uptick.className = 'bowtie-icon bowtie-math-plus-box';
-        uptick.style.display = 'none';
+        uptick.style.display = 'block';
+        uptick.style.cursor = 'pointer';
+        uptick.title = 'Increment value';
         uptick.addEventListener('click', () => {
             if (this.onUpTick) {
                 this.onUpTick();
@@ -57,7 +62,9 @@ export class View {
         // Create decrement button
         const downtick = document.createElement('div');
         downtick.className = 'bowtie-icon bowtie-math-minus-box';
-        downtick.style.display = 'none';
+        downtick.style.display = 'block';
+        downtick.style.cursor = 'pointer';
+        downtick.title = 'Decrement value';
         downtick.addEventListener('click', () => {
             if (this.onDownTick) {
                 this.onDownTick();
@@ -67,16 +74,27 @@ export class View {
         // Add hover effects
         this.container.addEventListener('mouseenter', () => {
             wrap.classList.add('border');
-            downtick.style.display = 'block';
-            uptick.style.display = 'block';
         });
 
         this.container.addEventListener('mouseleave', () => {
             if (document.activeElement !== input) {
                 wrap.classList.remove('border');
-                downtick.style.display = 'none';
-                uptick.style.display = 'none';
             }
+        });
+
+        // Add hover effects for buttons
+        uptick.addEventListener('mouseenter', () => {
+            uptick.style.opacity = '0.7';
+        });
+        uptick.addEventListener('mouseleave', () => {
+            uptick.style.opacity = '1';
+        });
+
+        downtick.addEventListener('mouseenter', () => {
+            downtick.style.opacity = '0.7';
+        });
+        downtick.addEventListener('mouseleave', () => {
+            downtick.style.opacity = '1';
         });
 
         // Assemble the UI
@@ -107,11 +125,31 @@ export class View {
         }
     }
 
+    private inputChangedWithDebounce(): void {
+        // Clear any existing timeout
+        if (this.saveTimeout) {
+            clearTimeout(this.saveTimeout);
+        }
+        
+        // Set a new timeout to save after 500ms of no typing
+        this.saveTimeout = setTimeout(() => {
+            this.inputChanged();
+            this.saveTimeout = null;
+        }, 500);
+    }
+
     public update(value: number): void {
         this.currentValue = String(value);
         const input = this.container.querySelector('input') as HTMLInputElement;
         if (input) {
             input.value = this.currentValue;
+        }
+    }
+
+    public cleanup(): void {
+        if (this.saveTimeout) {
+            clearTimeout(this.saveTimeout);
+            this.saveTimeout = null;
         }
     }
 }
