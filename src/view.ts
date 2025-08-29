@@ -46,6 +46,36 @@ export class View {
             evt.stopPropagation();
             return false;
         }) as EventListener, { passive: false });
+        
+        // Add global scroll prevention when mouse is over our extension
+        this.container.addEventListener('mouseenter', () => {
+            // Disable scrolling on document body when hovering over our extension
+            const globalScrollPreventer = (evt: Event) => {
+                evt.preventDefault();
+                evt.stopPropagation();
+                return false;
+            };
+            
+            document.body.addEventListener('wheel', globalScrollPreventer, { passive: false });
+            document.body.addEventListener('mousewheel', globalScrollPreventer as EventListener, { passive: false });
+            document.addEventListener('wheel', globalScrollPreventer, { passive: false });
+            document.addEventListener('mousewheel', globalScrollPreventer as EventListener, { passive: false });
+            
+            // Store the handler so we can remove it later
+            (this.container as any)._globalScrollPreventer = globalScrollPreventer;
+        });
+        
+        this.container.addEventListener('mouseleave', () => {
+            // Re-enable scrolling when mouse leaves our extension
+            const globalScrollPreventer = (this.container as any)._globalScrollPreventer;
+            if (globalScrollPreventer) {
+                document.body.removeEventListener('wheel', globalScrollPreventer);
+                document.body.removeEventListener('mousewheel', globalScrollPreventer as EventListener);
+                document.removeEventListener('wheel', globalScrollPreventer);
+                document.removeEventListener('mousewheel', globalScrollPreventer as EventListener);
+                delete (this.container as any)._globalScrollPreventer;
+            }
+        });
 
         // Create input wrapper
         const wrap = document.createElement('div');
@@ -264,6 +294,16 @@ export class View {
         if (this.saveTimeout) {
             clearTimeout(this.saveTimeout);
             this.saveTimeout = null;
+        }
+        
+        // Clean up global scroll preventers
+        const globalScrollPreventer = (this.container as any)._globalScrollPreventer;
+        if (globalScrollPreventer) {
+            document.body.removeEventListener('wheel', globalScrollPreventer);
+            document.body.removeEventListener('mousewheel', globalScrollPreventer as EventListener);
+            document.removeEventListener('wheel', globalScrollPreventer);
+            document.removeEventListener('mousewheel', globalScrollPreventer as EventListener);
+            delete (this.container as any)._globalScrollPreventer;
         }
     }
 }
