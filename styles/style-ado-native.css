@@ -4,17 +4,20 @@
     align-items: center !important;
     gap: 8px !important;
     overflow: visible !important;
-    width: auto !important;
-    min-width: 200px !important;
+    width: 100% !important;
+    min-width: 320px !important;
     height: auto !important;
-    min-height: 32px !important;
+    min-height: 40px !important;
+    padding: 8px !important;
 }
 
 .bolt-textfield {
     flex: 1 !important;
     overflow: visible !important;
-    min-width: 120px !important;
+    min-width: 150px !important;
+    max-width: 200px !important;
     width: auto !important;
+    height: 32px !important;
 }
 
 .bolt-textfield-input {
@@ -23,7 +26,10 @@
     -ms-overflow-style: none !important;
     width: auto !important;
     min-width: 120px !important;
+    height: 30px !important;
     box-sizing: border-box !important;
+    font-size: 14px !important;
+    padding: 6px 8px !important;
 }
 
 .bolt-textfield-input::-webkit-scrollbar {
@@ -34,19 +40,22 @@
 
 .bolt-button-group {
     display: flex !important;
-    gap: 2px !important;
+    gap: 4px !important;
     overflow: visible !important;
     flex-shrink: 0 !important;
-    min-width: 68px !important;
+    min-width: 72px !important;
+    max-width: 72px !important;
 }
 
 .bolt-button.bolt-button-subtle {
     min-width: 32px !important;
     max-width: 32px !important;
-    padding: 4px 8px !important;
+    width: 32px !important;
+    height: 32px !important;
+    padding: 6px 8px !important;
     font-family: monospace !important;
     font-weight: bold !important;
-    font-size: 14px !important;
+    font-size: 16px !important;
     line-height: 1.2 !important;
     overflow: visible !important;
     flex-shrink: 0 !important;
@@ -55,6 +64,7 @@
     color: #333 !important;
     cursor: pointer !important;
     transition: all 0.2s ease !important;
+    border-radius: 3px !important;
 }
 
 .bolt-button.bolt-button-subtle:hover {
@@ -72,7 +82,8 @@
     -ms-overflow-style: none !important;
     width: 100% !important;
     max-width: none !important;
-    min-width: 280px !important;
+    min-width: 320px !important;
+    min-height: 40px !important;
     box-sizing: border-box !important;
     display: flex !important;
     align-items: center !important;
@@ -108,7 +119,7 @@
     -ms-overflow-style: none !important;
     width: 100% !important;
     max-width: none !important;
-    min-width: 280px !important;
+    min-width: 320px !important;
 }
 
 .work-item-form-control-container::-webkit-scrollbar,

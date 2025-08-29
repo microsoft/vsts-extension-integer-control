@@ -35,10 +35,11 @@ export class ViewAdoNative {
         this.container.style.gap = '8px';
         this.container.style.overflow = 'visible';
         this.container.style.width = '100%';
-        this.container.style.minWidth = '280px';
+        this.container.style.minWidth = '320px';
         this.container.style.maxWidth = 'none';
         this.container.style.height = 'auto';
-        this.container.style.minHeight = '32px';
+        this.container.style.minHeight = '40px';
+        this.container.style.padding = '8px';
         this.container.style.boxSizing = 'border-box';
         this.container.style.scrollbarWidth = 'none';
         (this.container.style as any).msOverflowStyle = 'none';
@@ -154,7 +155,7 @@ export class ViewAdoNative {
                 (parent.style as any).msOverflowStyle = 'none';
                 parent.style.width = '100%';
                 parent.style.maxWidth = 'none';
-                parent.style.minWidth = '280px';
+                parent.style.minWidth = '320px';
                 parent.style.boxSizing = 'border-box';
             }
             
