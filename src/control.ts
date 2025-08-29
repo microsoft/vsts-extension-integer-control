@@ -1,4 +1,6 @@
 import * as SDK from "azure-devops-extension-sdk";
+import { getClient } from "azure-devops-extension-api";
+import { WorkItemTrackingRestClient } from "azure-devops-extension-api/WorkItemTracking";
 import { Model } from "./model";
 import { View } from "./view";
 import { ErrorView } from "./errorView";
@@ -7,7 +9,8 @@ export class Controller {
     private fieldName: string = "";
     private model!: Model;
     private view!: View;
-    private workItemFormService: any = null;
+    private workItemId: number = 0;
+    private witClient: WorkItemTrackingRestClient | null = null;
 
     constructor() {
         this.initialize();
@@ -46,128 +49,42 @@ export class Controller {
 
             console.log("View initialized successfully");
 
-            // Try to initialize service and load current value in background
-            this.initializeServiceAsync();
+            // Try to initialize the REST API client and load current value
+            await this.initializeRestClient();
 
         } catch (error) {
             this.handleError(error);
         }
     }
 
-    private async initializeServiceAsync(): Promise<void> {
-        // Add a longer delay to ensure work item form is fully loaded
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
+    private async initializeRestClient(): Promise<void> {
         try {
-            // Wait for SDK to be fully ready
+            console.log("Initializing work item tracking REST client...");
+            
+            // Wait for SDK to be ready
             await SDK.ready();
             
-            // Try multiple times with increasing delays
-            for (let attempt = 1; attempt <= 3; attempt++) {
-                try {
-                    console.log(`Service initialization attempt ${attempt}/3`);
-                    await this.initializeService();
-                    
-                    // If we get here, service initialization succeeded
-                    const currentValue = await this.getFieldValue();
-                    const numValue = Number(currentValue) || 0;
-                    this.model.setCurrentValue(numValue);
-                    this.view.update(numValue);
-                    console.log("Loaded current field value:", numValue);
-                    return; // Success!
-                    
-                } catch (serviceError) {
-                    console.warn(`Service initialization attempt ${attempt} failed:`, serviceError);
-                    if (attempt < 3) {
-                        console.log(`Waiting ${attempt * 2} seconds before retry...`);
-                        await new Promise(resolve => setTimeout(resolve, attempt * 2000));
-                    }
-                }
-            }
+            // Get the work item tracking REST client
+            this.witClient = getClient(WorkItemTrackingRestClient);
+            console.log("REST client initialized successfully");
+
+            // Get the current work item context
+            const workItemContext = SDK.getConfiguration();
+            console.log("Work item context:", workItemContext);
             
-            throw new Error("All service initialization attempts failed");
+            // Try to get the work item ID from the context
+            // This might be available in the host or through other means
+            const host = SDK.getHost();
+            console.log("Host information:", host);
+            
+            // For now, let's see what we can extract from the context
+            console.log("Extension context:", SDK.getExtensionContext());
+            
+            // TODO: Extract work item ID from the context to enable REST API calls
             
         } catch (error) {
-            console.warn("Could not load current field value, will work in offline mode:", error);
-            console.log("Extension will still work for local increment/decrement operations");
-            // Extension will still work for incrementing/decrementing, just won't sync with work item
+            console.warn("Could not initialize REST client:", error);
         }
-    }
-
-    private async initializeService(): Promise<void> {
-        console.log("Attempting to get work item form service...");
-        
-        try {
-            console.log("Current host:", SDK.getHost());
-        } catch (e) {
-            console.log("Could not get host info:", e);
-        }
-        
-        try {
-            console.log("Extension context:", SDK.getExtensionContext());
-        } catch (e) {
-            console.log("Could not get extension context:", e);
-        }
-        
-        try {
-            console.log("SDK ready state check...");
-            await SDK.ready();
-            console.log("SDK is ready");
-        } catch (e) {
-            console.log("SDK ready check failed:", e);
-        }
-        
-        // Try different service identifiers
-        const serviceIdentifiers = [
-            "ms.vss-work-web.work-item-form-service",
-            "ms.vss-work-web.work-item-form",
-            "workItemFormService"
-        ];
-        
-        for (const serviceId of serviceIdentifiers) {
-            try {
-                console.log(`Trying service identifier: ${serviceId}`);
-                this.workItemFormService = await SDK.getService(serviceId);
-                
-                console.log(`Service ${serviceId} returned:`, this.workItemFormService);
-                
-                if (this.workItemFormService) {
-                    console.log("Service object type:", typeof this.workItemFormService);
-                    console.log("Service properties:", Object.getOwnPropertyNames(this.workItemFormService));
-                    
-                    // Check if it has the methods we need
-                    if (typeof this.workItemFormService.getFieldValue === 'function') {
-                        console.log("Service has getFieldValue method - testing...");
-                        
-                        try {
-                            const testValue = await this.workItemFormService.getFieldValue(this.fieldName);
-                            console.log("Service test successful, current value:", testValue);
-                            return; // Success!
-                        } catch (testError) {
-                            console.warn("Service method test failed:", testError);
-                        }
-                    } else {
-                        console.log("Service missing getFieldValue method");
-                    }
-                }
-            } catch (serviceError) {
-                console.warn(`Service ${serviceId} failed:`, serviceError);
-            }
-        }
-        
-        throw new Error("Work item form service not available");
-    }
-
-    private async getFieldValue(): Promise<any> {
-        if (!this.workItemFormService) {
-            throw new Error("Work item form service not initialized");
-        }
-        return await this.workItemFormService.getFieldValue(this.fieldName);
-    }
-
-    private handleError(error: any): void {
-        console.error('Controller error:', error);
-        new ErrorView(error);
     }
 
     private async updateInternal(value: number): Promise<void> {
@@ -175,21 +92,20 @@ export class Controller {
             // Update the local model and view first
             this.update(value);
             
-            // Try to sync with work item if service is available
-            if (!this.workItemFormService) {
-                console.log("Work item service not available, trying to initialize...");
-                await this.initializeService();
+            // TODO: Implement REST API call to update work item field
+            if (this.witClient && this.workItemId) {
+                console.log(`Would update work item ${this.workItemId} field ${this.fieldName} to ${value} via REST API`);
+                // await this.witClient.updateWorkItem([{
+                //     op: "replace",
+                //     path: `/fields/${this.fieldName}`,
+                //     value: value
+                // }], this.workItemId);
+            } else {
+                console.log(`Local update only: ${this.fieldName} = ${value}`);
             }
             
-            if (this.workItemFormService) {
-                await this.workItemFormService.setFieldValue(this.fieldName, value);
-                console.log(`Updated field ${this.fieldName} to ${value}`);
-            } else {
-                console.warn("Work item form service not available, update only applied locally");
-            }
         } catch (error) {
             console.warn("Failed to update work item field, keeping local change:", error);
-            // Keep the local update even if work item sync fails
         }
     }
 
@@ -208,5 +124,10 @@ export class Controller {
 
     public getFieldName(): string {
         return this.fieldName;
+    }
+
+    private handleError(error: any): void {
+        console.error('Controller error:', error);
+        new ErrorView(error);
     }
 }
