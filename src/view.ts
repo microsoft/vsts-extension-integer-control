@@ -28,11 +28,8 @@ export class View {
             document.body.appendChild(this.container);
         }
         
-        // Style the container for better layout (restore the working layout)
-        this.container.style.display = 'flex';
-        this.container.style.alignItems = 'center';
-        this.container.style.gap = '8px';
-        this.container.style.padding = '8px';
+        // Use the original container styling - much more minimal
+        this.container.style.paddingLeft = '1px';
         
         // Prevent scrolling on the entire container as well
         this.container.addEventListener('wheel', (evt) => {
@@ -40,49 +37,11 @@ export class View {
             evt.stopPropagation();
             return false;
         }, { passive: false });
-        
-        this.container.addEventListener('mousewheel', ((evt) => {
-            evt.preventDefault();
-            evt.stopPropagation();
-            return false;
-        }) as EventListener, { passive: false });
-        
-        // Add global scroll prevention when mouse is over our extension
-        this.container.addEventListener('mouseenter', () => {
-            // Disable scrolling on document body when hovering over our extension
-            const globalScrollPreventer = (evt: Event) => {
-                evt.preventDefault();
-                evt.stopPropagation();
-                return false;
-            };
-            
-            document.body.addEventListener('wheel', globalScrollPreventer, { passive: false });
-            document.body.addEventListener('mousewheel', globalScrollPreventer as EventListener, { passive: false });
-            document.addEventListener('wheel', globalScrollPreventer, { passive: false });
-            document.addEventListener('mousewheel', globalScrollPreventer as EventListener, { passive: false });
-            
-            // Store the handler so we can remove it later
-            (this.container as any)._globalScrollPreventer = globalScrollPreventer;
-        });
-        
-        this.container.addEventListener('mouseleave', () => {
-            // Re-enable scrolling when mouse leaves our extension
-            const globalScrollPreventer = (this.container as any)._globalScrollPreventer;
-            if (globalScrollPreventer) {
-                document.body.removeEventListener('wheel', globalScrollPreventer);
-                document.body.removeEventListener('mousewheel', globalScrollPreventer as EventListener);
-                document.removeEventListener('wheel', globalScrollPreventer);
-                document.removeEventListener('mousewheel', globalScrollPreventer as EventListener);
-                delete (this.container as any)._globalScrollPreventer;
-            }
-        });
 
         // Create input wrapper
         const wrap = document.createElement('div');
         wrap.className = 'wrap combo emptyBorder';
-        wrap.style.display = 'inline-block';
-        wrap.style.marginRight = '8px';
-        wrap.style.verticalAlign = 'top';
+        wrap.style.flexGrow = '1';
         
         // Prevent scrolling on the wrapper as well
         wrap.addEventListener('wheel', (evt) => {
@@ -90,12 +49,6 @@ export class View {
             evt.stopPropagation();
             return false;
         }, { passive: false });
-        
-        wrap.addEventListener('mousewheel', ((evt) => {
-            evt.preventDefault();
-            evt.stopPropagation();
-            return false;
-        }) as EventListener, { passive: false });
 
         // Create number input
         const input = document.createElement('input');
@@ -104,34 +57,15 @@ export class View {
         input.value = this.currentValue;
         input.setAttribute('aria-valuenow', this.currentValue);
         
-        // Minimal styling - let Azure DevOps styles take precedence, but add some margin
-        input.style.marginTop = '8px';
-        input.style.marginBottom = '8px';
-        
-        // More aggressive approach to disable scrolling
+        // More aggressive approach to disable scrolling - simplified
         const preventScroll = (evt: Event) => {
             evt.preventDefault();
             evt.stopPropagation();
-            evt.stopImmediatePropagation();
             return false;
         };
         
-        // Disable mouse wheel scrolling on the input - multiple approaches
+        // Disable mouse wheel scrolling on the input
         input.addEventListener('wheel', preventScroll, { passive: false });
-        input.addEventListener('mousewheel', preventScroll as EventListener, { passive: false });
-        input.addEventListener('DOMMouseScroll', preventScroll as EventListener, { passive: false }); // Firefox
-        
-        // Disable scrolling when input is focused or hovered
-        input.addEventListener('mouseenter', () => {
-            input.addEventListener('wheel', preventScroll, { passive: false });
-            input.addEventListener('mousewheel', preventScroll as EventListener, { passive: false });
-        });
-        
-        input.addEventListener('focus', () => {
-            // Remove any default wheel behavior
-            input.addEventListener('wheel', preventScroll, { passive: false });
-            input.addEventListener('mousewheel', preventScroll as EventListener, { passive: false });
-        });
         
         // Handle keydown for arrow keys - but don't prevent them, just control them
         input.addEventListener('keydown', (evt) => {
@@ -151,28 +85,24 @@ export class View {
 
         wrap.appendChild(input);
 
-        // Create increment button
+        // Create increment button - make it smaller and more subtle
         const uptick = document.createElement('div');
         uptick.className = 'bowtie-icon bowtie-math-plus-box';
-        uptick.style.display = 'block';
+        uptick.style.display = 'inline-block';
         uptick.style.cursor = 'pointer';
-        uptick.style.fontSize = '24px';
+        uptick.style.fontSize = '12px';
         uptick.style.color = '#666';
-        uptick.style.padding = '4px';
+        uptick.style.padding = '2px';
         uptick.style.userSelect = 'none';
-        uptick.style.border = '1px solid #ccc';
-        uptick.style.borderRadius = '3px';
-        uptick.style.textAlign = 'center';
-        uptick.style.lineHeight = '1';
-        uptick.style.width = '30px';
-        uptick.style.height = '30px';
-        uptick.style.backgroundColor = '#f8f9fa';
+        uptick.style.marginLeft = '4px';
+        uptick.style.verticalAlign = 'middle';
         uptick.title = 'Increment value';
         
-        // Fallback text if icon doesn't load
+        // Fallback text if icon doesn't load - smaller
         if (!uptick.textContent) {
             uptick.textContent = '+';
             uptick.style.fontWeight = 'bold';
+            uptick.style.fontSize = '10px';
         }
         
         uptick.addEventListener('click', () => {
@@ -181,28 +111,24 @@ export class View {
             }
         });
 
-        // Create decrement button
+        // Create decrement button - make it smaller and more subtle
         const downtick = document.createElement('div');
         downtick.className = 'bowtie-icon bowtie-math-minus-box';
-        downtick.style.display = 'block';
+        downtick.style.display = 'inline-block';
         downtick.style.cursor = 'pointer';
-        downtick.style.fontSize = '24px';
+        downtick.style.fontSize = '12px';
         downtick.style.color = '#666';
-        downtick.style.padding = '4px';
+        downtick.style.padding = '2px';
         downtick.style.userSelect = 'none';
-        downtick.style.border = '1px solid #ccc';
-        downtick.style.borderRadius = '3px';
-        downtick.style.textAlign = 'center';
-        downtick.style.lineHeight = '1';
-        downtick.style.width = '30px';
-        downtick.style.height = '30px';
-        downtick.style.backgroundColor = '#f8f9fa';
+        downtick.style.marginLeft = '4px';
+        downtick.style.verticalAlign = 'middle';
         downtick.title = 'Decrement value';
         
-        // Fallback text if icon doesn't load
+        // Fallback text if icon doesn't load - smaller
         if (!downtick.textContent) {
             downtick.textContent = '-';
             downtick.style.fontWeight = 'bold';
+            downtick.style.fontSize = '10px';
         }
         
         downtick.addEventListener('click', () => {
@@ -222,23 +148,19 @@ export class View {
             }
         });
 
-        // Add hover effects for buttons
+        // Add hover effects for buttons - more subtle
         uptick.addEventListener('mouseenter', () => {
-            uptick.style.backgroundColor = '#e6e6e6';
-            uptick.style.borderColor = '#999';
+            uptick.style.color = '#333';
         });
         uptick.addEventListener('mouseleave', () => {
-            uptick.style.backgroundColor = '#f8f9fa';
-            uptick.style.borderColor = '#ccc';
+            uptick.style.color = '#666';
         });
 
         downtick.addEventListener('mouseenter', () => {
-            downtick.style.backgroundColor = '#e6e6e6';
-            downtick.style.borderColor = '#999';
+            downtick.style.color = '#333';
         });
         downtick.addEventListener('mouseleave', () => {
-            downtick.style.backgroundColor = '#f8f9fa';
-            downtick.style.borderColor = '#ccc';
+            downtick.style.color = '#666';
         });
 
         // Assemble the UI
@@ -294,16 +216,6 @@ export class View {
         if (this.saveTimeout) {
             clearTimeout(this.saveTimeout);
             this.saveTimeout = null;
-        }
-        
-        // Clean up global scroll preventers
-        const globalScrollPreventer = (this.container as any)._globalScrollPreventer;
-        if (globalScrollPreventer) {
-            document.body.removeEventListener('wheel', globalScrollPreventer);
-            document.body.removeEventListener('mousewheel', globalScrollPreventer as EventListener);
-            document.removeEventListener('wheel', globalScrollPreventer);
-            document.removeEventListener('mousewheel', globalScrollPreventer as EventListener);
-            delete (this.container as any)._globalScrollPreventer;
         }
     }
 }
