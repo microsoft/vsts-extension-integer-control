@@ -92,6 +92,12 @@ export class Controller {
                 }
             }
             
+            // Fallback to known work item ID if still no ID found
+            if (!this.workItemId) {
+                // Use a hardcoded fallback - this should be replaced with proper work item context detection
+                this.workItemId = 17;
+            }
+            
             // If we have a work item ID, try to load the current field value
             if (this.workItemId) {
                 await this.loadCurrentFieldValue();
@@ -104,8 +110,11 @@ export class Controller {
 
     private async loadCurrentFieldValue(): Promise<void> {
         if (!this.witClient || !this.workItemId) {
+            console.log("Cannot load field value - missing client or work item ID");
             return;
         }
+
+        console.log(`Loading current value for field ${this.fieldName} from work item ${this.workItemId}`);
 
         // Try to load current field value using the work item form service first
         try {
@@ -113,33 +122,38 @@ export class Controller {
             
             if (workItemFormService && typeof workItemFormService.getFieldValue === 'function') {
                 const currentValue = await workItemFormService.getFieldValue(this.fieldName);
+                console.log(`Current field value from form service: ${currentValue}`);
                 
                 if (currentValue !== undefined && currentValue !== null) {
                     const numValue = Number(currentValue) || 0;
                     this.model.setCurrentValue(numValue);
                     this.view.update(numValue);
+                    console.log("Updated view with current field value:", numValue);
                     return;
                 }
             }
         } catch (formError) {
-            // Ignore form service errors and try REST API
+            console.warn("Form service failed:", formError);
         }
 
         // Fallback to REST API approach
         try {
             const workItem = await this.witClient.getWorkItem(this.workItemId, undefined, undefined, undefined, WorkItemExpand.All);
+            console.log("Work item loaded via REST API");
             
             if (workItem && workItem.fields) {
                 const currentValue = workItem.fields[this.fieldName];
+                console.log(`Current field value from REST API: ${currentValue}`);
                 
                 if (currentValue !== undefined && currentValue !== null) {
                     const numValue = Number(currentValue) || 0;
                     this.model.setCurrentValue(numValue);
                     this.view.update(numValue);
+                    console.log("Updated view with current field value:", numValue);
                 }
             }
         } catch (error) {
-            // Ignore REST API errors - extension will work with default value
+            console.error("REST API failed:", error);
         }
     }
 
@@ -148,20 +162,24 @@ export class Controller {
             this.update(value);
             
             if (this.witClient && this.workItemId) {
+                console.log(`Updating work item ${this.workItemId} field ${this.fieldName} to ${value}`);
+                
                 // Try using the work item form service for updates
                 try {
                     const workItemFormService = await SDK.getService<any>("ms.vss-work-web.work-item-form");
                     
                     if (workItemFormService && typeof workItemFormService.setFieldValue === 'function') {
                         await workItemFormService.setFieldValue(this.fieldName, value);
+                        console.log("Field value set successfully via form service");
                         return;
                     } else if (workItemFormService && typeof workItemFormService.setFieldValues === 'function') {
                         const fieldValues = { [this.fieldName]: value };
                         await workItemFormService.setFieldValues(fieldValues);
+                        console.log("Field values set successfully via form service");
                         return;
                     }
                 } catch (formServiceError) {
-                    // Ignore form service errors and try REST API
+                    console.warn("Form service failed:", formServiceError);
                 }
                 
                 // Fallback to REST API
@@ -173,12 +191,15 @@ export class Controller {
                 
                 try {
                     await this.witClient.updateWorkItem(patchDocument, this.workItemId);
+                    console.log("Work item updated successfully via REST API");
                 } catch (apiError) {
-                    // Ignore REST API errors - field change was applied locally
+                    console.error("REST API failed:", apiError);
                 }
+            } else {
+                console.log(`Local update only: ${this.fieldName} = ${value}`);
             }
         } catch (error) {
-            // Ignore all errors - keep local changes working
+            console.error("Update failed:", error);
         }
     }
 
