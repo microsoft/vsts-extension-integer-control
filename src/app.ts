@@ -32,7 +32,10 @@ class App {
     }
 
     private onWorkItemLoaded(args: IWorkItemLoadedArgs): void {
-        this.controller = new Controller();
+        // Add a small delay to ensure work item is fully initialized
+        setTimeout(() => {
+            this.controller = new Controller();
+        }, 100);
     }
 
     private onFieldChanged(args: IWorkItemFieldChangedArgs): void {
