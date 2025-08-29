@@ -33,10 +33,13 @@ export class ViewAdoNative {
         this.container.style.display = 'flex';
         this.container.style.alignItems = 'center';
         this.container.style.gap = '8px';
-        this.container.style.overflow = 'hidden';
+        this.container.style.overflow = 'visible';
         this.container.style.maxWidth = '100%';
         this.container.style.maxHeight = '100%';
         this.container.style.boxSizing = 'border-box';
+        this.container.style.scrollbarWidth = 'none';
+        (this.container.style as any).msOverflowStyle = 'none';
+        this.container.style.padding = '8px';
         
         // Aggressively prevent scrollbars
         this.container.style.scrollbarWidth = 'none';

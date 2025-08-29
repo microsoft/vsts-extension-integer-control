@@ -3,7 +3,7 @@
     display: flex !important;
     align-items: center !important;
     gap: 8px !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     max-width: 100% !important;
     max-height: 100% !important;
 }
@@ -31,27 +31,52 @@
 .bolt-button-group {
     display: flex !important;
     gap: 2px !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     flex-shrink: 0 !important;
+    min-width: 68px !important;
 }
 
 .bolt-button.bolt-button-subtle {
     min-width: 32px !important;
+    max-width: 32px !important;
     padding: 4px 8px !important;
     font-family: monospace !important;
     font-weight: bold !important;
     font-size: 14px !important;
     line-height: 1.2 !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     flex-shrink: 0 !important;
+    background-color: #f8f9fa !important;
+    border: 1px solid #ccc !important;
+    color: #333 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+.bolt-button.bolt-button-subtle:hover {
+    background-color: #e6e6e6 !important;
+    border-color: #999 !important;
+    color: #000 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* Aggressively hide ALL scrollbars in the extension container and parents */
-#control-container,
+#control-container {
+    overflow: visible !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 8px !important;
+}
+
 #control-container *,
 .bolt-textfield-container,
 .bolt-textfield-container * {
-    overflow: hidden !important;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
     max-width: 100% !important;
@@ -72,7 +97,7 @@
 .work-item-form-control-container,
 .work-item-form-control,
 .control-container {
-    overflow: hidden !important;
+    overflow: visible !important;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
 }
