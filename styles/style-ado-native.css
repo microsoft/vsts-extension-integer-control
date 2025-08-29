@@ -70,13 +70,15 @@
     overflow: visible !important;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
-    width: auto !important;
-    min-width: 200px !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 280px !important;
     box-sizing: border-box !important;
     display: flex !important;
     align-items: center !important;
     gap: 8px !important;
     padding: 8px !important;
+    flex-wrap: nowrap !important;
 }
 
 #control-container *,
@@ -104,6 +106,9 @@
     overflow: visible !important;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 280px !important;
 }
 
 .work-item-form-control-container::-webkit-scrollbar,
