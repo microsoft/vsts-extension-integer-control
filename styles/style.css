@@ -1,163 +1,90 @@
-/* Scoped styles for hitcount extension - prevent CSS leakage */
-.hitcount-extension-root.container {
-    display: flex !important;
-    align-items: center !important;
-    padding-left: 1px;
-    margin: 0;
-    height: 32px;
-    max-height: 32px;
-    overflow: hidden !important;
-}
-
-.hitcount-extension-root .wrap {
-    flex-grow: 1;
-    height: 24px;
-    max-height: 24px;
-    overflow: hidden !important;
+.bolt-textfield-container {
     display: flex;
     align-items: center;
-}
-
-.hitcount-extension-root.container > .bowtie-icon {
-    font-size: 16px;
-    color: #333;
-    margin: 0px 2px;
-    cursor: pointer;
-    padding: 6px 8px;
-    user-select: none;
-    vertical-align: middle;
-    display: inline-block;
-    flex-shrink: 0;
-    line-height: 1;
-    
-    /* Make them look like proper buttons */
-    background-color: #f8f9fa;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    min-width: 24px;
-    text-align: center;
-    font-weight: bold;
-    font-family: monospace;
-    transition: all 0.2s ease;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.hitcount-extension-root .bowtie-icon.focus, 
-.hitcount-extension-root .bowtie-icon:hover {
-    background-color: #e6e6e6;
-    border-color: #999;
-    color: #000;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transform: translateY(-1px);
-}
-
-.hitcount-extension-root .bowtie-icon:active {
-    background-color: #d4d4d4;
-    border-color: #666;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-    transform: translateY(0);
-}
-
-.hitcount-extension-root .combo {
-    border: 1px solid transparent;
-    height: auto;
-    min-height: 2em;
-    position: relative;
-    padding: 4px;
-    background: #fff;
-    margin: 0;
-    display: flex;
-    align-items: center;
-}
-
-.hitcount-extension-root .combo:focus, 
-.hitcount-extension-root .combo:hover, 
-.hitcount-extension-root .combo.border {
-    border: 1px solid #e6e6e6;
-}
-
-.hitcount-extension-root div.wrap>input[type=text] {
-    height: 100%;
-    font-size: 14px;
-    text-overflow: ellipsis;
-    border: none;
-    outline: none;
-}
-
-.hitcount-extension-root input {
+    gap: 2px;
     width: 100%;
-    font-size: 14px;
-    text-overflow: ellipsis;
-    border: none;
-    outline: none;
-    margin: 0;
-    padding: 0;
-    vertical-align: middle;
-    line-height: normal;
+    height: 26px;
+    padding: 2px;
     box-sizing: border-box;
-    height: auto;
+    flex-direction: row;
+    overflow: hidden;
+    line-height: 1;
 }
 
-/*
- * Remove up/down arrows on input - not needed for text type but keep for consistency
- */
-.hitcount-extension-root input[type="text"]::-webkit-outer-spin-button,
-.hitcount-extension-root input[type="text"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+.bolt-textfield {
+    flex: 1;
+    min-width: 80px;
+    max-width: 120px;
+    height: 22px;
+    margin-right: 2px;
+    display: flex;
+    align-items: center;
 }
 
-.hitcount-extension-root input[type="text"] {
-    -moz-appearance: textfield;
-    appearance: textfield;
+.bolt-textfield-input {
+    width: 100%;
+    height: 22px;
+    box-sizing: border-box;
+    font-size: 12px;
+    padding: 2px 4px;
+    border: 1px solid #ccc;
+    overflow: hidden;
 }
 
-/* Hide scrollbars only within our extension - scoped */
-.hitcount-extension-root,
-.hitcount-extension-root .wrap, 
-.hitcount-extension-root input {
+/* Global scroll prevention */
+body, html, .extension-container, .bolt-textfield-container, #control-container {
+    overflow: hidden;
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
 
-.hitcount-extension-root::-webkit-scrollbar,
-.hitcount-extension-root .wrap::-webkit-scrollbar,
-.hitcount-extension-root input::-webkit-scrollbar {
-    display: none; /* Safari and Chrome */
-    width: 0 !important;
-    height: 0 !important;
+/* Hide scrollbars in webkit browsers */
+body::-webkit-scrollbar,
+html::-webkit-scrollbar,
+.extension-container::-webkit-scrollbar,
+.bolt-textfield-container::-webkit-scrollbar,
+#control-container::-webkit-scrollbar,
+.bolt-textfield-input::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
 }
 
-/* Force no overflow only on our extension elements - scoped */
-.hitcount-extension-root * {
-    overflow: hidden !important;
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
+.bolt-button-group {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+    min-width: 48px;
+    max-width: 48px;
+    align-items: center;
+    height: 22px;
 }
 
-.hitcount-extension-root *::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
+.bolt-button.bolt-button-subtle {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 1;
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
-/* Fix Azure DevOps form controls that might be affected by CSS leakage */
-.bolt-textfield-input,
-.bolt-textfield-input input,
-.bolt-textfield-input textarea {
-    overflow-y: visible !important;
-    overflow-x: visible !important;
-    overflow: visible !important;
+
+.bolt-button.bolt-button-subtle:hover {
+    background-color: #e6e6e6;
+    border-color: #999;
+    color: #000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.bolt-textfield-input textarea {
-    resize: none !important;
-    height: auto !important;
-    line-height: 1.4;
-}
-
-/* Ensure ADO inputs don't inherit our overflow hidden */
-input:not(.hitcount-extension-root input),
-textarea:not(.hitcount-extension-root textarea) {
-    overflow: visible !important;
-}

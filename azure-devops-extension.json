@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "hitcount-control",
-    "version": "1.0.10",
+    "version": "1.0.7",
     "name": "Plus/minus integer control",
     "scopes": [
         "vso.work",
@@ -77,7 +77,7 @@
             "properties": {
                 "name": "Plus/minus integer control",
                 "uri": "index.html",
-                "height": 28,
+                "height": "auto",
                 "inputs": [
                     {
                         "id": "FieldName",

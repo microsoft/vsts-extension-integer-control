@@ -2,9 +2,11 @@
   "devDependencies": {
     "@types/chai": "^5.2.2",
     "@types/mocha": "^10.0.10",
+    "@types/node": "^24.3.0",
     "azure-devops-extension-api": "^4.241.0",
     "azure-devops-extension-sdk": "^4.0.2",
     "chai": "^5.1.1",
+    "copy-webpack-plugin": "^13.0.1",
     "css-loader": "^7.1.2",
     "mocha": "^10.8.2",
     "rimraf": "^6.0.1",
@@ -13,7 +15,8 @@
     "ts-loader": "^9.5.1",
     "typescript": "^5.6.3",
     "webpack": "^5.95.0",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.2.2"
   },
   "name": "hitcount-control",
   "private": true,
@@ -23,6 +26,8 @@
     "build": "npm run clean && webpack --mode=development",
     "build:release": "npm run clean && webpack --mode=production",
     "test": "tsc --project tsconfig.test.json && mocha 'dist/test/**/*.test.js' --no-config",
+    "dev": "npm run build && webpack serve --mode=development",
+    "start": "npm run dev",
     "package-dev": "npm run build && npx tfx extension create --manifest-globs azure-devops-extension.json --rev-version --overrides-file configs/dev.json",
     "package-release": "npm run build:release && npx tfx extension create --manifest-globs azure-devops-extension.json --rev-version --overrides-file configs/release.json"
   }

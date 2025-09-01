@@ -2,29 +2,25 @@ import * as SDK from "azure-devops-extension-sdk";
 import { Controller } from "./control";
 
 // Import CSS - webpack will handle this
-import '../styles/style-ado-native.css';
+import '../styles/style.css';
 
 // Work Item Form Control implementation
 class WorkItemFormControl {
     private controller: Controller | null = null;
 
     public onLoaded(workItemLoadedArgs: any): void {
-        console.log("Work item loaded:", workItemLoadedArgs);
         
         // Initialize the controller when work item is loaded
         setTimeout(() => {
-            console.log("Initializing controller...");
             this.controller = new Controller();
         }, 100);
     }
 
     public onUnloaded(): void {
-        console.log("Work item unloaded");
         this.controller = null;
     }
 
     public onFieldChanged(fieldChangedArgs: any): void {
-        console.log("Field changed:", fieldChangedArgs);
         
         if (this.controller) {
             const fieldName = this.controller.getFieldName();
@@ -37,11 +33,9 @@ class WorkItemFormControl {
 
 // Initialize and register the contribution
 SDK.init().then(() => {
-    console.log("SDK initialized, registering contribution...");
-    
+    console.log("SDK initialized");
     // Register our work item form control with the contribution ID from manifest
     const contributionId = SDK.getContributionId();
-    console.log("Contribution ID:", contributionId);
     
     const control = new WorkItemFormControl();
     
