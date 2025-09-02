@@ -1,0 +1,170 @@
+import { Model } from "./model";
+
+export class View {
+    private currentValue: string = "";
+    private container!: HTMLElement;
+    private saveTimeout: any = null;
+
+    constructor(
+        private model: Model,
+        private onInputChanged?: (value: number) => void,
+        private onUpTick?: () => void,
+        private onDownTick?: () => void
+    ) {
+        this.init();
+    }
+
+    private init(): void {
+        // Use the existing control-container from HTML
+        const existingContainer = document.getElementById('control-container');
+        if (existingContainer) {
+            this.container = existingContainer;
+            // Clear any existing content
+            this.container.innerHTML = '';
+        } else {
+            // Fallback: create container if it doesn't exist
+            this.container = document.createElement('div');
+            this.container.className = 'container';
+            document.body.appendChild(this.container);
+        }
+        
+        // Try to use Azure DevOps native component classes
+        this.container.className = 'bolt-textfield-container';
+        this.container.id = 'control-container';
+
+        // Create the main input using ADO classes
+        const inputGroup = document.createElement('div');
+        inputGroup.className = 'bolt-textfield';
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'bolt-textfield-input';
+        input.inputMode = 'numeric';
+        input.pattern = '[0-9]*';
+        
+        this.currentValue = String(this.model.getCurrentValue());
+        input.value = this.currentValue;
+        input.setAttribute('aria-valuenow', this.currentValue);
+        
+        // Add input validation and events
+        input.addEventListener('input', (evt) => {
+            const target = evt.target as HTMLInputElement;
+            // Only allow numbers
+            target.value = target.value.replace(/[^0-9]/g, '');
+            this.inputChangedWithDebounce();
+        });
+        
+        input.addEventListener('keydown', (evt) => {
+            if (evt.key === 'ArrowUp') {
+                evt.preventDefault();
+                this.handleKeyDown(evt);
+            } else if (evt.key === 'ArrowDown') {
+                evt.preventDefault();
+                this.handleKeyDown(evt);
+            }
+            // Allow: backspace, delete, tab, escape, enter
+            if ([46, 8, 9, 27, 13].indexOf(evt.keyCode) !== -1 ||
+                // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+                (evt.keyCode === 65 && evt.ctrlKey === true) ||
+                (evt.keyCode === 67 && evt.ctrlKey === true) ||
+                (evt.keyCode === 86 && evt.ctrlKey === true) ||
+                (evt.keyCode === 88 && evt.ctrlKey === true)) {
+                return;
+            }
+            // Ensure that it's a number and stop the keypress
+            if ((evt.shiftKey || (evt.keyCode < 48 || evt.keyCode > 57)) && (evt.keyCode < 96 || evt.keyCode > 105)) {
+                evt.preventDefault();
+            }
+        });
+        
+        input.addEventListener('change', () => this.inputChanged());
+        input.addEventListener('blur', () => this.inputChanged());
+        
+        inputGroup.appendChild(input);
+
+        // Create buttons using ADO button classes
+        const buttonGroup = document.createElement('div');
+        buttonGroup.className = 'bolt-button-group';
+        
+        // Decrement button
+        const decrementBtn = document.createElement('button');
+        decrementBtn.type = 'button';
+        decrementBtn.className = 'bolt-button bolt-button-subtle';
+        decrementBtn.textContent = '−';
+        decrementBtn.title = 'Decrement value';
+        decrementBtn.addEventListener('click', () => {
+            if (this.onDownTick) {
+                this.onDownTick();
+            }
+        });
+        
+        // Increment button
+        const incrementBtn = document.createElement('button');
+        incrementBtn.type = 'button';
+        incrementBtn.className = 'bolt-button bolt-button-subtle';
+        incrementBtn.textContent = '+';
+        incrementBtn.title = 'Increment value';
+        incrementBtn.addEventListener('click', () => {
+            if (this.onUpTick) {
+                this.onUpTick();
+            }
+        });
+        
+        buttonGroup.appendChild(decrementBtn);
+        buttonGroup.appendChild(incrementBtn);
+
+        // Assemble the UI
+        this.container.appendChild(inputGroup);
+        this.container.appendChild(buttonGroup);
+    }
+    
+    public update(value: number): void {
+        this.currentValue = String(value);
+        const input = this.container.querySelector('input') as HTMLInputElement;
+        if (input) {
+            input.value = this.currentValue;
+        }
+    }
+
+    private handleKeyDown(evt: KeyboardEvent): void {
+        if (evt.key === 'ArrowUp') {
+            if (this.onUpTick) {
+                this.onUpTick();
+                evt.preventDefault();
+            }
+        } else if (evt.key === 'ArrowDown') {
+            if (this.onDownTick) {
+                this.onDownTick();
+                evt.preventDefault();
+            }
+        }
+    }
+
+    private inputChanged(): void {
+        const input = this.container.querySelector('input') as HTMLInputElement;
+        const newValue = Number(input.value);
+        if (this.onInputChanged && !isNaN(newValue)) {
+            this.onInputChanged(newValue);
+        }
+    }
+
+    private inputChangedWithDebounce(): void {
+        // Clear any existing timeout
+        if (this.saveTimeout) {
+            clearTimeout(this.saveTimeout);
+        }
+
+        // Set a new timeout to save after 500ms of no typing
+        this.saveTimeout = setTimeout(() => {
+            this.inputChanged();
+            this.saveTimeout = null;
+        }, 500);
+    }
+
+    public cleanup(): void {
+        if (this.saveTimeout) {
+            clearTimeout(this.saveTimeout);
+            this.saveTimeout = null;
+        }
+    }
+}

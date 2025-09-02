@@ -1,9 +1,9 @@
 {
     "compilerOptions": {
-        "module": "es6",
+        "module": "commonjs",
         "moduleResolution": "node",
-        "target": "es2018",
-        "rootDir": "./src",
+        "target": "es2020",
+        "rootDir": "./",
         "outDir": "./dist",
         "sourceMap": true,
         "strict": true,
@@ -11,18 +11,20 @@
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "types": [
-            "mocha"
+            "node", 
+            "mocha",
+            "chai"
         ],
         "lib": [
             "dom",
-            "es2018"
+            "es2020"
         ]
     },
     "include": [
+        "test/**/*",
         "src/**/*"
     ],
     "exclude": [
-        "node_modules",
-        "dist"
+        "node_modules"
     ]
 }

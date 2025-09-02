@@ -1,23 +1,50 @@
-// A task runner configuration.
+// Modern task runner configuration for webpack-based build
 {
     "version": "2.0.0",
-    "command": "grunt",
     "tasks": [
         {
             "label": "build",
-            "type": "grunt",
-            "task": "build",
-            "problemMatcher": "$msCompile",
+            "type": "npm",
+            "script": "build",
+            "problemMatcher": "$tsc",
             "group": {
-                "_id": "build",
-                "isDefault": false
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
             }
         },
         {
-            "label": "publish",
-            "type": "grunt",
-            "task": "publish",
-            "problemMatcher": "$msCompile"
+            "label": "build:release", 
+            "type": "npm",
+            "script": "build:release",
+            "problemMatcher": "$tsc",
+            "group": "build"
+        },
+        {
+            "label": "test",
+            "type": "npm", 
+            "script": "test",
+            "problemMatcher": "$tsc",
+            "group": "test"
+        },
+        {
+            "label": "package-dev",
+            "type": "npm",
+            "script": "package-dev", 
+            "problemMatcher": "$tsc",
+            "group": "build"
+        },
+        {
+            "label": "package-release",
+            "type": "npm",
+            "script": "package-release",
+            "problemMatcher": "$tsc", 
+            "group": "build"
         }
     ]
 }

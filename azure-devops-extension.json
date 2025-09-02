@@ -51,7 +51,7 @@
             "addressable": true
         },
         {
-            "path": "scripts",
+            "path": "dist",
             "addressable": true
         },
         {
@@ -77,7 +77,7 @@
             "properties": {
                 "name": "Plus/minus integer control",
                 "uri": "index.html",
-                "height": 28,
+                "height": "auto",
                 "inputs": [
                     {
                         "id": "FieldName",

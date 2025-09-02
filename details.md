@@ -4,7 +4,8 @@
 
 # Make integer fields more interactive
 
-![Hit Count Control](img/hitCountControl.png)
+
+<img src="img/hitCountControl.png" alt="Hit Count Control" style="width:50%; height:auto;">
 
 # Increase/decrease counters with a single click
 

@@ -1,59 +1,90 @@
-.container {
+.bolt-textfield-container {
     display: flex;
-    padding-left: 1px;
-}
-
-.wrap {
-    flex-grow: 1;
-}
-
-.container > .bowtie-icon {
-    font-size: 24px;
-    color: lightgray;
-    margin: 4px 0px 0px 4px;
-    cursor: pointer;
-}
-
-.bowtie-icon.focus, .bowtie-icon:hover {
-    color: gray;
-}
-
-.combo {
-    border: 1px solid transparent;
-    height: 2em;
-    position: relative;
-    padding-left: 2px;
-    background: #fff;
-}
-
-.combo:focus, .combo:hover, .combo.border {
-    border: 1px solid #e6e6e6;
-}
-
-div.wrap>input[type=number] {
-    height: 100%;
-    font-size: 14px;
-    text-overflow: ellipsis;
-    border: none;
-    outline: none;
-}
-
-input {
+    align-items: center;
+    gap: 2px;
     width: 100%;
-    font-size: 14px;
-    text-overflow: ellipsis;
-    border: none;
-    outline: none;
+    height: 26px;
+    padding: 2px;
+    box-sizing: border-box;
+    flex-direction: row;
+    overflow: hidden;
+    line-height: 1;
 }
 
-/*
- * Remove up/down arrows on input type=number
- */
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+.bolt-textfield {
+    flex: 1;
+    min-width: 80px;
+    max-width: 120px;
+    height: 22px;
+    margin-right: 2px;
+    display: flex;
+    align-items: center;
 }
-input[type="number"] {
-    -moz-appearance: textfield;
+
+.bolt-textfield-input {
+    width: 100%;
+    height: 22px;
+    box-sizing: border-box;
+    font-size: 12px;
+    padding: 2px 4px;
+    border: 1px solid #ccc;
+    overflow: hidden;
 }
+
+/* Global scroll prevention */
+body, html, .extension-container, .bolt-textfield-container, #control-container {
+    overflow: hidden;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+/* Hide scrollbars in webkit browsers */
+body::-webkit-scrollbar,
+html::-webkit-scrollbar,
+.extension-container::-webkit-scrollbar,
+.bolt-textfield-container::-webkit-scrollbar,
+#control-container::-webkit-scrollbar,
+.bolt-textfield-input::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+.bolt-button-group {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+    min-width: 48px;
+    max-width: 48px;
+    align-items: center;
+    height: 22px;
+}
+
+.bolt-button.bolt-button-subtle {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 1;
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+
+.bolt-button.bolt-button-subtle:hover {
+    background-color: #e6e6e6;
+    border-color: #999;
+    color: #000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
