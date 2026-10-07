@@ -1,4 +1,4 @@
-import * as SDK from "azure-devops-extension-sdk";
+import type * as SDK from "azure-devops-extension-sdk";
 import { WorkItemTrackingRestClient, WorkItemExpand } from "azure-devops-extension-api/WorkItemTracking";
 import { Model } from "./model";
 import { View } from "./view";
@@ -9,14 +9,15 @@ export class Controller {
     private model!: Model;
     private view!: View;
     private workItemId?: number;
+    public readonly ready: Promise<void>;
 
-    constructor() {
-        this.initialize();
+    constructor(private sdk: Pick<typeof SDK, "getConfiguration" | "getService">) {
+        this.ready = this.initialize();
     }
 
     private async initialize(): Promise<void> {
         try {
-            const config = SDK.getConfiguration();
+            const config = this.sdk.getConfiguration();
             this.fieldName = config.witInputs?.["FieldName"] || "";
 
             if (!this.fieldName) {
@@ -58,7 +59,7 @@ export class Controller {
     private async loadCurrentFieldValue(): Promise<void> {
         try {
             console.log("Attempting to get work item form service...");
-            const workItemFormService = await SDK.getService<any>("ms.vss-work-web.work-item-form");
+            const workItemFormService = await this.sdk.getService<any>("ms.vss-work-web.work-item-form");
             console.log("Work item form service obtained:", !!workItemFormService);
 
             if (workItemFormService) {
@@ -83,7 +84,7 @@ export class Controller {
                 console.log(`Updating work item ${this.workItemId} field ${this.fieldName} to ${value}`);
                 try {
                     console.log("Attempting to get work item form service for update...");
-                    const workItemFormService = await SDK.getService<any>("ms.vss-work-web.work-item-form");
+                    const workItemFormService = await this.sdk.getService<any>("ms.vss-work-web.work-item-form");
                     console.log("Form service obtained for update:", !!workItemFormService);
                     if (workItemFormService) {
                         await workItemFormService.setFieldValue(this.fieldName, value);

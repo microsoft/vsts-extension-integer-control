@@ -13,6 +13,10 @@ describe("Model", () => {
         expect(model.getCurrentValue()).to.equal(0);
     });
 
+    it("initializes with the supplied value", () => {
+        expect(new Model(12).getCurrentValue()).to.equal(12);
+    });
+
     it("increments 0 to be 1", () => {
         model.incrementValue();
         expect(model.getCurrentValue()).to.equal(1);
@@ -38,5 +42,9 @@ describe("Model", () => {
 
     it("throws error when setting undefined value", () => {
         expect(() => model.setCurrentValue(undefined as any)).to.throw();
+    });
+
+    it("throws error when setting null", () => {
+        expect(() => model.setCurrentValue(null as any)).to.throw();
     });
 });
