@@ -6,6 +6,10 @@ typings
 # Build output
 dist/
 
+# Playwright UI test output
+test-results/
+playwright-report/
+
 # TypeScript compilation cache
 *.tsbuildinfo
 

@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@types/chai": "^5.2.2",
     "@types/mocha": "^10.0.10",
     "@types/node": "^24.3.0",
@@ -8,6 +9,7 @@
     "chai": "^5.1.1",
     "copy-webpack-plugin": "^13.0.1",
     "css-loader": "^7.1.2",
+    "http-server": "^14.1.1",
     "mocha": "^10.8.2",
     "rimraf": "^6.0.1",
     "style-loader": "^4.0.0",
@@ -26,6 +28,8 @@
     "build": "npm run clean && webpack --mode=development",
     "build:release": "npm run clean && webpack --mode=production",
     "test": "tsc --project tsconfig.test.json && mocha 'dist/test/**/*.test.js' --no-config",
+    "test:ui": "npm run build && playwright test -c ui-tests",
+    "test:ui:install": "playwright install chromium",
     "dev": "npm run build && webpack serve --mode=development",
     "start": "npm run dev",
     "package-dev": "npm run build && npx tfx extension create --manifest-globs azure-devops-extension.json --rev-version --overrides-file configs/dev.json",
