@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Mock Azure DevOps host</title>
+</head>
+<body>
+	<script>
+		// Mock work item form host. Speaks the azure-devops-extension-sdk XDM protocol
+		// (JSON-RPC over postMessage) to the real extension bundle running in the iframe.
+		(function () {
+			var options = Object.assign(
+				{ field: 'Custom.HitCount', fields: {}, failGet: false, failSet: false },
+				window.__hostOptions
+			);
+			var contributionId = 'ms-devlabs.hitcount-control.hitcount-control';
+			var formServiceId = 'ms.vss-work-web.work-item-form';
+
+			var frame = document.createElement('iframe');
+			frame.id = 'extension';
+			frame.style.cssText = 'width:400px;height:120px;border:0';
+
+			var pending = {};
+			var nextRequestId = 100000;
+
+			var host = {
+				contributionId: contributionId,
+				loaded: false,
+				loadFailed: null,
+				fields: Object.assign({}, options.fields),
+				getCalls: [],
+				setCalls: [],
+				failGet: options.failGet,
+				failSet: options.failSet,
+				invoke: invoke,
+				load: function () { return invoke('onLoaded', [{ id: 1 }]); },
+				unload: function () { return invoke('onUnloaded', []); },
+				changeField: function (name, value) {
+					var changedFields = {};
+					changedFields[name] = value;
+					return invoke('onFieldChanged', [{ changedFields: changedFields }]);
+				}
+			};
+			window.__host = host;
+
+			function post(message) {
+				frame.contentWindow.postMessage(JSON.stringify(message), '*');
+			}
+
+			// Host -> extension call on the registered contribution object.
+			function invoke(methodName, params) {
+				var id = nextRequestId++;
+				return new Promise(function (resolve, reject) {
+					pending[id] = { resolve: resolve, reject: reject };
+					post({ id: id, instanceId: contributionId, methodName: methodName, params: params });
+				});
+			}
+
+			function handshakeResult() {
+				var witInputs = options.field ? { FieldName: options.field } : {};
+				return {
+					contributionId: contributionId,
+					context: {
+						extension: {
+							id: 'ms-devlabs.hitcount-control',
+							publisherId: 'ms-devlabs',
+							extensionId: 'hitcount-control',
+							version: '1.0.0'
+						},
+						pageContext: {
+							webContext: {
+								project: { id: 'project-id', name: 'Project' },
+								team: { id: 'team-id', name: 'Team' }
+							}
+						},
+						user: { id: 'user-id', name: 'user@example.com', displayName: 'Test User' },
+						host: { id: 'host-id', name: 'org', isHosted: true }
+					},
+					initialConfig: { witInputs: witInputs }
+				};
+			}
+
+			function dispatch(message) {
+				var params = message.params || [];
+				switch (message.instanceId) {
+					case 'DevOps.HostControl':
+						if (message.methodName === 'initialHandshake') { return handshakeResult(); }
+						if (message.methodName === 'notifyLoadSucceeded') { host.loaded = true; return; }
+						if (message.methodName === 'notifyLoadFailed') { host.loadFailed = params[0] || true; return; }
+						if (message.methodName === 'resize') { return; }
+						break;
+					case 'DevOps.ServiceManager':
+						if (message.methodName === 'getService' && params[0] === formServiceId) {
+							// Functions cross the XDM boundary as proxies that are invoked via "__proxyFunctions".
+							return {
+								getFieldValue: { __proxyFunctionId: 1, _channelId: 1 },
+								setFieldValue: { __proxyFunctionId: 2, _channelId: 1 }
+							};
+						}
+						break;
+					case '__proxyFunctions':
+						if (message.methodName === 'proxy1') {
+							host.getCalls.push({ field: params[0] });
+							if (host.failGet) { throw new Error('getFieldValue failed'); }
+							return host.fields[params[0]];
+						}
+						if (message.methodName === 'proxy2') {
+							host.setCalls.push({ field: params[0], value: params[1] });
+							if (host.failSet) { throw new Error('setFieldValue failed'); }
+							host.fields[params[0]] = params[1];
+							return;
+						}
+						break;
+				}
+				throw new Error('Unhandled host call: ' + message.instanceId + '.' + message.methodName);
+			}
+
+			function reply(request, payload) {
+				post(Object.assign({ id: request.id, handshakeToken: request.handshakeToken }, payload));
+			}
+
+			window.addEventListener('message', function (event) {
+				if (event.source !== frame.contentWindow || typeof event.data !== 'string') { return; }
+				var message;
+				try { message = JSON.parse(event.data); } catch (e) { return; }
+
+				if (message.instanceId) {
+					Promise.resolve()
+						.then(function () { return dispatch(message); })
+						.then(
+							function (result) { reply(message, { result: result }); },
+							function (error) { reply(message, { error: { name: 'Error', message: String(error && error.message || error) } }); }
+						);
+				} else if (pending[message.id]) {
+					var request = pending[message.id];
+					delete pending[message.id];
+					if (message.error) { request.reject(new Error(message.error.message || 'Extension call failed')); }
+					else { request.resolve(message.result); }
+				}
+			});
+
+			// Added last so the message listener exists before the extension starts its handshake.
+			frame.src = '/index.html';
+			document.body.appendChild(frame);
+		})();
+	</script>
+</body>
+</html>
