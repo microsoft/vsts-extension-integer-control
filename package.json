@@ -1,6 +1,7 @@
 {
   "devDependencies": {
     "@types/chai": "^5.2.2",
+    "@types/jsdom": "^30.0.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "^24.3.0",
     "azure-devops-extension-api": "^4.241.0",
@@ -8,6 +9,7 @@
     "chai": "^5.1.1",
     "copy-webpack-plugin": "^13.0.1",
     "css-loader": "^7.1.2",
+    "jsdom": "^29.1.1",
     "mocha": "^10.8.2",
     "rimraf": "^6.0.1",
     "style-loader": "^4.0.0",
